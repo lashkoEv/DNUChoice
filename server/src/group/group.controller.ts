@@ -156,7 +156,6 @@ export class GroupController {
     const result = await this.groupService.findOne(params.id, []);
 
     if (result) {
-
       await this.groupService.remove(result);
     }
   }
