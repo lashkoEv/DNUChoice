@@ -152,6 +152,7 @@ export class GroupController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
+
   async remove(@Param() params: NumberIdSchema) {
     const result = await this.groupService.findOne(params.id, []);
 
