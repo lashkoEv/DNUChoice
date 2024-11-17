@@ -1,0 +1,37 @@
+<div class="container">
+  <form class="form-container" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <div class="title">{{ title }}</div>
+    <p-inputGroup>
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-envelope"></i>
+    </span>
+      <input pInputText type="email" placeholder="Пошта" [(ngModel)]="email" name="email" required email
+             #emailModel="ngModel"
+      />
+    </p-inputGroup>
+
+    <div *ngIf="emailModel.invalid && emailModel.touched">
+      <small *ngIf="emailModel.errors?.['required']" class="p-error">Пошта не може бути пустою!</small>
+      <small *ngIf="emailModel.errors?.['email']" class="p-error">Введіть коректну пошту!</small>
+    </div>
+
+    <p-inputGroup class="mt-3">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-lock"></i>
+    </span>
+      <input pInputText type="password" placeholder="Пароль" [(ngModel)]="password" name="password" required
+             [minlength]="6"
+             #passwordModel="ngModel"
+      />
+    </p-inputGroup>
+
+    <div *ngIf="passwordModel.invalid && passwordModel.touched">
+      <small *ngIf="passwordModel.errors?.['required']" class="p-error">Пароль не може бути пустим!</small>
+      <small *ngIf="passwordModel.errors?.['minlength']" class="p-error">Пароль повинен бути не менше 6
+        символів!</small>
+    </div>
+
+
+    <button pButton type="submit" label="{{title}}" class="mt-3" [disabled]="!loginForm.form.valid"></button>
+  </form>
+</div>

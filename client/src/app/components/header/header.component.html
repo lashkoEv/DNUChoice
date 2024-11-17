@@ -1,0 +1,22 @@
+<p-menubar [model]="items">
+  <ng-template pTemplate="start">
+    <div class="logo-container">
+      <img src="/logo.png" alt="Logo" class="logo" routerLink="/" />
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="end">
+    <div *ngIf="user$ | async as user; else loggedOut">
+      <div class="button-container">
+        <button pButton label="Вихід" icon="pi pi-sign-out" class="p-button-text" (click)="logout()"></button>
+      </div>
+    </div>
+
+    <ng-template #loggedOut>
+      <div class="button-container">
+        <button pButton routerLink="/authorization" label="Вхід" icon="pi pi-sign-in" class="p-button-text"></button>
+        <button pButton routerLink="/registration" label="Реєстрація" icon="pi pi-user-plus" class="p-button-outlined ml-2"></button>
+      </div>
+    </ng-template>
+  </ng-template>
+</p-menubar>

@@ -1,0 +1,60 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  text-align: center;
+}
+
+.title {
+  color: var(--primary-color);
+  font-size: 6rem;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  font-family: 'Lobster', sans-serif;
+  margin-bottom: 1rem;
+  font-weight: 300;
+  color: #8c969e;
+}
+
+.image {
+  height: 60%;
+}
+
+@media screen and (max-width: 1400px) {
+  .title {
+    font-size: 7rem;
+  }
+
+  .image {
+    height: 40%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .title {
+    font-size: 6rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .title {
+    font-size: 4rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+}

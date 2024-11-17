@@ -59,8 +59,6 @@ export class GroupController {
     type: GroupsDto,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(@Query() query: PaginationSchema) {
     const scopes = [];

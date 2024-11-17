@@ -20,7 +20,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
-import { SessionDto } from './dto/SessionDto';
+import { UserDto } from '../user/dto/UserDto';
+import { IUser } from '../user/entities/IUser';
 
 @ApiTags('Sessions')
 @Controller('/sessions')
@@ -38,11 +39,11 @@ export class SessionController {
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    type: SessionDto,
+    type: UserDto,
   })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Not Found' })
   @Post()
-  async createSession(@Body() body: CreateSessionSchema): Promise<SessionDto> {
+  async createSession(@Body() body: CreateSessionSchema): Promise<UserDto> {
     const user = await this.userService.findUserByEmailAndPassword(body);
 
     const token = await this.sessionService.createToken(user.id);
@@ -53,7 +54,13 @@ export class SessionController {
       +process.env.EXPIRES_IN_MS,
     );
 
-    return new SessionDto(token);
+    const data = {
+      token,
+    };
+
+    Object.assign(data, user.toJSON());
+
+    return new UserDto(data as IUser);
   }
 
   @ApiOperation({ summary: 'Deletes the session' })
