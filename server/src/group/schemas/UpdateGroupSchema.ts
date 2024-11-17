@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsPositive,
+  IsString,
+  MaxLength,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class UpdateGroupSchema {
   @ApiProperty({
@@ -12,4 +19,15 @@ export class UpdateGroupSchema {
   @IsNotEmpty()
   @MaxLength(500)
   title: string;
+
+  @ApiProperty({
+    description: 'Year',
+    nullable: false,
+    example: '1',
+    type: 'integer',
+  })
+  @Type(() => Number)
+  @IsInt()
+  @IsPositive()
+  year: number;
 }

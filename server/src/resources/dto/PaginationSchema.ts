@@ -1,14 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { Min, IsInt } from 'class-validator';
+import { Min, IsInt, IsOptional } from 'class-validator';
 
 export class PaginationSchema {
   @ApiProperty({
     description: 'Limit',
-    nullable: false,
+    required: false,
     example: 10,
     type: 'number',
   })
+  @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
@@ -16,10 +17,11 @@ export class PaginationSchema {
 
   @ApiProperty({
     description: 'Offset',
-    nullable: false,
+    required: false,
     example: 0,
     type: 'number',
   })
+  @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(0)

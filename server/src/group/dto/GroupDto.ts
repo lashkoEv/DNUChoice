@@ -19,6 +19,14 @@ export class GroupDto {
   title: string;
 
   @ApiProperty({
+    description: 'Year',
+    nullable: false,
+    example: '1',
+    type: 'integer',
+  })
+  year: number;
+
+  @ApiProperty({
     description: 'Created at',
     nullable: false,
     example: '2024-07-03T19:32:40.000Z',

@@ -22,7 +22,6 @@ import {
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { SessionDto } from './dto/SessionDto';
 
-@ApiBearerAuth()
 @ApiTags('Sessions')
 @Controller('/sessions')
 export class SessionController {
@@ -43,9 +42,7 @@ export class SessionController {
   })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Not Found' })
   @Post()
-  async createSession(
-    @Body() body: CreateSessionSchema,
-  ): Promise<SessionDto> {
+  async createSession(@Body() body: CreateSessionSchema): Promise<SessionDto> {
     const user = await this.userService.findUserByEmailAndPassword(body);
 
     const token = await this.sessionService.createToken(user.id);
@@ -69,6 +66,7 @@ export class SessionController {
     description: 'Invalid  auth token',
   })
   @HttpCode(204)
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete()
   async deleteSession(@Request() req): Promise<void> {

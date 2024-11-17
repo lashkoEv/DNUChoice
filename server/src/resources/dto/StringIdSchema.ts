@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsMongoId } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
-export class StringIdShema {
+export class StringIdSchema {
   @ApiProperty({
     description: 'Identifier',
     nullable: false,

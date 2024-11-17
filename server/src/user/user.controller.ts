@@ -129,8 +129,6 @@ export class UserController {
     type: UserDto,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Post()
   async addUser(@Body() body: CreateUserSchema): Promise<UserDto> {
     const result = await this.userService.create(body);

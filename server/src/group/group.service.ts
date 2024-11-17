@@ -15,7 +15,7 @@ export class GroupService {
 
   async count(scopes: any[] = []): Promise<number> {
     try {
-      return this.groupModel.scope(scopes).count();
+      return await this.groupModel.scope(scopes).count();
     } catch (error) {
       throw new BadRequestException(error);
     }

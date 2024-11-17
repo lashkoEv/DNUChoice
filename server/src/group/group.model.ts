@@ -7,12 +7,30 @@ import {
   HasMany,
   Model,
   PrimaryKey,
+  Scopes,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '../user/user.model';
 
+@Scopes(() => ({
+  byId: (id: number) => ({
+    where: { id },
+  }),
+  byPage: (limit: number = 10, offset: number = 0) => ({
+    limit,
+    offset,
+  }),
+  withUsers: () => ({
+    include: [
+      {
+        model: User,
+        subQuery: false,
+      },
+    ],
+  }),
+}))
 @Table({
   tableName: 'academicGroups',
   timestamps: true,
@@ -38,6 +56,16 @@ export class Group extends Model {
   @AllowNull(false)
   @Column(DataType.STRING(255))
   title: string;
+
+  @ApiProperty({
+    description: 'Year',
+    nullable: false,
+    example: '1',
+    type: 'integer',
+  })
+  @AllowNull(false)
+  @Column(DataType.TINYINT)
+  year: number;
 
   @HasMany(() => User)
   users: User[];

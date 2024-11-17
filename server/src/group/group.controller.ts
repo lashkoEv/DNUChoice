@@ -8,6 +8,7 @@ import {
   HttpStatus,
   UseGuards,
   Put,
+  Query,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupSchema } from './schemas/CreateGroupSchema';
@@ -17,7 +18,6 @@ import {
   ApiBody,
   ApiOperation,
   ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -25,6 +25,7 @@ import { JwtAuthGuard } from '../guards/jwt.guard';
 import { GroupDto } from './dto/GroupDto';
 import { GroupsDto } from './dto/GroupsDto';
 import { NumberIdSchema } from '../resources/dto/NumberIdSchema';
+import { PaginationSchema } from '../resources/dto/PaginationSchema';
 
 @ApiTags('Groups')
 @Controller('/api/groups')
@@ -52,12 +53,6 @@ export class GroupController {
   }
 
   @ApiOperation({ summary: 'Gets all groups' })
-  @ApiQuery({
-    name: 'offset',
-    description: 'Offset',
-    example: '0',
-    type: 'integer',
-  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Success',
@@ -67,9 +62,14 @@ export class GroupController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll() {
+  async findAll(@Query() query: PaginationSchema) {
     const scopes = [];
     let groups = [];
+
+    if (query.limit || query.offset) {
+      scopes.push({ method: ['byPage', query.limit, query.offset] });
+    }
+
     const count = await this.groupService.count(scopes);
 
     if (count) {
