@@ -8,7 +8,7 @@ import { User } from './user/user.model';
 import { RedisCacheModule } from './redis-cache/redis-cache.module';
 import { SessionModule } from './session/session.module';
 import { GroupModule } from './group/group.module';
-import {Group} from "./group/group.model";
+import { Group } from './group/group.model';
 
 @Module({
   imports: [

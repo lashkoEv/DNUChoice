@@ -1,19 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { Min, IsInt, IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsInt,
+  IsPositive,
+  IsArray,
+  ArrayMinSize,
+} from 'class-validator';
+import { PaginationSchema } from '../../resources/dto/PaginationSchema';
+import { Transform } from 'class-transformer';
 
-export class GetAllUsersSchema {
-  @ApiProperty({
-    description: 'Offset',
-    nullable: false,
-    example: 0,
-    type: 'number',
-  })
-  @Type(() => Number)
-  @IsInt()
-  @Min(0)
-  offset: number;
-
+export class GetAllUsersSchema extends PaginationSchema {
   @ApiProperty({
     description: 'Search value',
     required: false,
@@ -25,4 +23,21 @@ export class GetAllUsersSchema {
   @IsString()
   @IsNotEmpty()
   query?: string;
+
+  @ApiProperty({
+    description: 'Roles as an array of numbers',
+    required: false,
+    nullable: true,
+    example: [1, 2],
+    type: [Number],
+  })
+  @IsOptional()
+  @IsArray()
+  @ArrayMinSize(1)
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value.map(Number) : [Number(value)],
+  )
+  @IsInt({ each: true })
+  @IsPositive({ each: true })
+  role?: number[];
 }

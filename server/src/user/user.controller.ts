@@ -16,7 +16,6 @@ import {
   ApiBody,
   ApiOperation,
   ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -38,12 +37,6 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ summary: 'Gets all users' })
-  @ApiQuery({
-    name: 'offset',
-    description: 'Offset',
-    example: '0',
-    type: 'integer',
-  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Success',
@@ -61,10 +54,25 @@ export class UserController {
     let count = 0;
     let users = [];
 
-    count = await this.userService.getCount(query, payload.id);
+    const scopes: any[] = [{ method: ['excludesId', payload.id] }];
+
+    if (query.query) {
+      scopes.push({ method: ['byNameOrEmail', query.query] });
+    }
+
+    if (query.role) {
+      scopes.push({ method: ['byRole', query.role] });
+    }
+
+    count = await this.userService.getCount(scopes);
 
     if (count) {
-      users = await this.userService.findAll(query, payload.id);
+      scopes.push(
+        { method: ['byPage', query.limit, query.offset] },
+        'withGroup',
+      );
+
+      users = await this.userService.findAll(scopes);
     }
 
     return new UsersDto(count, users);

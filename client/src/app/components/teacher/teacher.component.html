@@ -1,0 +1,289 @@
+<p-confirmPopup [style]="{marginLeft: '3rem'}"></p-confirmPopup>
+
+<div class="user-list-container">
+  <div class="container-header mb-3">
+    <div class="search-container">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          placeholder="Пошук"
+          (input)="applyFilter($event)"
+        />
+      </span>
+    </div>
+
+    <button
+      pButton
+      label="Додати користувача"
+      icon="pi pi-plus"
+      class="p-button-success ml-2"
+      (click)="openAddUserDialog()"
+    ></button>
+  </div>
+
+  <p-table
+    [value]="filteredUsers"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="5"
+    [sortMode]="'multiple'"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id">ID
+          <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">Ім'я
+          <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="email">Email
+          <p-sortIcon field="email"></p-sortIcon>
+        </th>
+        <th pSortableColumn="role">Роль
+          <p-sortIcon field="role"></p-sortIcon>
+        </th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role === 2 ? 'Викладач' : 'Адміністратор' }}</td>
+        <td>
+          <button
+            pButton
+            icon="pi pi-pencil"
+            class="p-button-warning"
+            (click)="editUser(user)"
+          ></button>
+        </td>
+        <td>
+          <button
+            pButton
+            icon="pi pi-trash"
+            class="p-button-danger"
+            (click)="confirmDelete($event, user.id)"
+          ></button>
+        </td>
+        <td>
+          <button
+            pButton
+            icon="pi pi-eye"
+            class="p-button-accent"
+            (click)="viewUserDetails(user)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6">Дані не знайдені...</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="displayUserDialog"
+  [header]="'Детальна інформація'"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{width: '500px'}"
+  [modal]="true"
+  [baseZIndex]="10000">
+
+  <ng-template pTemplate="content">
+    <div *ngIf="selectedUser">
+      <p><strong>ID:</strong> {{ selectedUser.id }}</p>
+      <p><strong>Ім'я:</strong> {{ selectedUser.name }}</p>
+      <p><strong>Email:</strong> {{ selectedUser.email }}</p>
+      <p><strong>Дата створення запису:</strong> {{ selectedUser.createdAt | date:'dd.MM.yyyy HH:mm' }}</p>
+      <p><strong>Дата оновлення запису:</strong> {{ selectedUser.updatedAt | date:'dd.MM.yyyy HH:mm' }}</p>
+    </div>
+    <div *ngIf="!selectedUser">
+      <p>Інформація відсутня.</p>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="displayAddUserDialog"
+  [header]="'Додати нового користувача'"
+  [closable]="true"
+  [modal]="true"
+  [style]="{width: '600px'}"
+  [contentStyle]="{'min-height': '300px'}"
+  [baseZIndex]="10000">
+
+  <ng-template pTemplate="content">
+    <form [formGroup]="addUserForm">
+      <div class="p-fluid form-container">
+        <div class="p-field fullSize">
+          <p-dropdown
+            id="role"
+            [options]="roles"
+            optionLabel="label"
+            formControlName="role"
+            placeholder="Оберіть роль">
+          </p-dropdown>
+          <small *ngIf="addUserForm.get('role')?.invalid && addUserForm.get('role')?.touched" class="p-error">
+            Оберіть роль!
+          </small>
+        </div>
+
+        <div class="p-field fullSize">
+          <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-user"></i>
+            </span>
+
+            <input
+              id="name"
+              type="text"
+              pInputText
+              formControlName="name"
+              placeholder="Ім'я користувача"
+            />
+          </p-inputGroup>
+          <small *ngIf="addUserForm.get('name')?.invalid && addUserForm.get('name')?.touched" class="p-error">
+            Введіть ім'я користувача!
+          </small>
+        </div>
+
+        <div class="p-field fullSize">
+          <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-envelope"></i>
+            </span>
+            <input
+              id="email"
+              type="email"
+              pInputText
+              formControlName="email"
+              placeholder="Email"
+            />
+          </p-inputGroup>
+          <small *ngIf="addUserForm.get('email')?.invalid && addUserForm.get('email')?.touched" class="p-error">
+            Введіть коректний email!
+          </small>
+        </div>
+
+        <div class="p-field fullSize">
+          <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-key"></i>
+            </span>
+            <input
+              id="password"
+              type="password"
+              pInputText
+              formControlName="password"
+              placeholder="Пароль"
+            />
+          </p-inputGroup>
+          <small *ngIf="addUserForm.get('password')?.invalid && addUserForm.get('password')?.touched" class="p-error">
+            Пароль має містити не менше 6 символів!
+          </small>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton label="Зберегти" icon="pi pi-check" (click)="saveUser()" [disabled]="addUserForm.invalid"></button>
+    <button pButton label="Скасувати" icon="pi pi-times" (click)="closeAddUserDialog()" class="p-button-text"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="displayEditUserDialog"
+  [header]="'Редагування інформації про користувача'"
+  [closable]="true"
+  [modal]="true"
+  [style]="{width: '600px'}"
+  [baseZIndex]="10000">
+
+  <ng-template pTemplate="content">
+    <form [formGroup]="editUserForm">
+      <div class="p-fluid form-container">
+        <div *ngIf="false" class="p-field fullSize">
+          <p-dropdown
+            id="roleUpdate"
+            [options]="roles"
+            optionLabel="label"
+            formControlName="roleUpdate"
+            placeholder="Оберіть роль">
+          </p-dropdown>
+        </div>
+
+        <div class="p-field fullSize">
+          <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-user"></i>
+            </span>
+            <input
+              id="nameUpdate"
+              type="text"
+              pInputText
+              formControlName="nameUpdate"
+              placeholder="Ім'я користувача"
+            />
+          </p-inputGroup>
+          <small *ngIf="editUserForm.get('name')?.invalid && editUserForm.get('name')?.touched" class="p-error">
+            Введіть ім'я користувача!
+          </small>
+        </div>
+
+        <div class="p-field fullSize">
+          <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-envelope"></i>
+            </span>
+            <input
+              id="emailUpdate"
+              type="email"
+              pInputText
+              formControlName="emailUpdate"
+              placeholder="Email"
+            />
+          </p-inputGroup>
+          <small *ngIf="editUserForm.get('email')?.invalid && editUserForm.get('email')?.touched" class="p-error">
+            Введіть коректний email!
+          </small>
+        </div>
+
+        <div class="p-field fullSize">
+          <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-key"></i>
+            </span>
+            <input
+              id="passwordUpdate"
+              type="password"
+              pInputText
+              formControlName="passwordUpdate"
+              placeholder="Пароль"
+            />
+          </p-inputGroup>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton label="Зберегти" icon="pi pi-check" (click)="saveEditedUser()" [disabled]="editUserForm.invalid"></button>
+    <button pButton label="Скасувати" icon="pi pi-times" (click)="closeEditUserDialog()" class="p-button-text"></button>
+  </ng-template>
+</p-dialog>
+
+

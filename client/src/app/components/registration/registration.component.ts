@@ -35,6 +35,7 @@ export class RegistrationComponent implements OnInit {
       password: this.password,
       name: this.fullName,
       groupId: this.group,
+      role: 3
     };
 
     await this.userService.register(registrationData).subscribe((data: any) => {

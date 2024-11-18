@@ -6,11 +6,11 @@ import {AppComponent} from './app.component';
 import {RegistrationComponent} from './components/registration/registration.component';
 import {ButtonModule} from 'primeng/button';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MenubarModule} from 'primeng/menubar';
 import {HeaderComponent} from './components/header/header.component'
 import {ToastModule} from 'primeng/toast';
-import {MessageService} from 'primeng/api';
+import {ConfirmationService, MessageService} from 'primeng/api';
 import {InputGroupModule} from 'primeng/inputgroup';
 import {InputGroupAddonModule} from 'primeng/inputgroupaddon';
 import {InputTextModule} from 'primeng/inputtext';
@@ -20,6 +20,10 @@ import {MainComponent} from './components/main/main.component';
 import {DropdownModule} from 'primeng/dropdown';
 import {PasswordModule} from 'primeng/password';
 import {AuthorizationComponent} from './components/authorization/authorization.component';
+import { TeacherComponent } from './components/teacher/teacher.component';
+import { TableModule } from 'primeng/table';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,8 @@ import {AuthorizationComponent} from './components/authorization/authorization.c
     RegistrationComponent,
     HeaderComponent,
     ErrorComponent,
-    MainComponent
+    MainComponent,
+    TeacherComponent
   ],
   imports: [
     BrowserModule,
@@ -43,9 +48,13 @@ import {AuthorizationComponent} from './components/authorization/authorization.c
     InputTextModule,
     HttpClientModule,
     DropdownModule,
-    PasswordModule
+    PasswordModule,
+    TableModule,
+    ConfirmPopupModule,
+    DialogModule,
+    ReactiveFormsModule
   ],
-  providers: [MessageService, HttpClient],
+  providers: [MessageService, ConfirmationService, HttpClient],
   bootstrap: [AppComponent]
 })
 export class AppModule {

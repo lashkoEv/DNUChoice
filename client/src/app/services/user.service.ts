@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, catchError} from 'rxjs';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {BehaviorSubject, catchError, Observable} from 'rxjs';
 import {MessageService} from 'primeng/api';
 
 @Injectable({
@@ -60,14 +60,77 @@ export class UserService {
   }
 
   register(data: Object) {
-    Object.assign(data, {role: 3});
-
     return this.http.post(this.apiUrl, data).pipe(
       catchError((err) => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Помилка реєстрації!',
-          detail: 'Перевірте введені дані!',
+          summary: 'Помилка створення облікового запису!',
+          detail: 'Перевірте введені дані! Можливо, користувач з такою поштою вже існує.',
+        });
+        throw err;
+      })
+    );
+  }
+
+  getUsersByRole(roles: number[]): Observable<any[]> {
+    const user = this.userSubject.getValue();
+    const token = user?.session.token;
+
+    const headers = token
+      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
+      : new HttpHeaders();
+
+    let params = new HttpParams();
+    roles.forEach(role => {
+      params = params.append('role', role.toString());
+    });
+
+    return this.http.get<any[]>(`${this.apiUrl}`, { headers, params }).pipe(
+      catchError((err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Помилка отримання даних!',
+          detail: 'Не вдалося отримати список користувачів.',
+        });
+        throw err;
+      })
+    );
+  }
+
+  deleteUser(userId: number): Observable<void> {
+    const user = this.userSubject.getValue();
+    const token = user?.session.token;
+
+    const headers = token
+      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
+      : new HttpHeaders();
+
+    return this.http.delete<void>(`${this.apiUrl}/${userId}`, { headers }).pipe(
+      catchError((err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Помилка видалення!',
+          detail: 'Не вдалося видалити користувача.',
+        });
+        throw err;
+      })
+    );
+  }
+
+  updateUser(userId: number, data: any) {
+    const user = this.userSubject.getValue();
+    const token = user?.session.token;
+
+    const headers = token
+      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
+      : new HttpHeaders();
+
+    return this.http.put<any>(`${this.apiUrl}/${userId}`, data, { headers }).pipe(
+      catchError((err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Помилка редагування облікового запису!',
+          detail: 'Перевірте введені дані! Можливо, користувач з такою поштою вже існує.',
         });
         throw err;
       })

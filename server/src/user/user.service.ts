@@ -7,9 +7,8 @@ import {
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
 import { User } from './user.model';
-import { Op, ScopeOptions } from 'sequelize';
+import { Op } from 'sequelize';
 import { CreateSessionSchema } from 'src/session/schemas/CreateSessionSchema';
-import { GetAllUsersSchema } from './schemas/GetAllUsersSchema';
 
 @Injectable()
 export class UserService {
@@ -18,32 +17,16 @@ export class UserService {
     private userModel: typeof User,
   ) {}
 
-  async getCount(params: GetAllUsersSchema, id: number): Promise<number> {
+  async getCount(scopes: any[]): Promise<number> {
     try {
-      const scopes: ScopeOptions[] = [{ method: ['excludesId', id] }];
-
-      if (params.query) {
-        scopes.push({ method: ['byNameOrEmail', params.query] });
-      }
-
       return this.userModel.scope(scopes).count();
     } catch (error) {
       throw new BadRequestException(error);
     }
   }
 
-  async findAll(params: GetAllUsersSchema, id: number): Promise<User[]> {
+  async findAll(scopes: any[]): Promise<User[]> {
     try {
-      const scopes: any[] = [
-        { method: ['byPage', params.offset] },
-        { method: ['excludesId', id] },
-        'withGroup',
-      ];
-
-      if (params.query) {
-        scopes.push({ method: ['byNameOrEmail', params.query] });
-      }
-
       return await this.userModel.scope(scopes).findAll();
     } catch (error) {
       throw new BadRequestException(error);
@@ -101,22 +84,19 @@ export class UserService {
         throw new BadRequestException('Email must be unique!');
       }
 
-      if (
-        newData.phone &&
-        (await this.checkUniqueValues(id, 'phone', newData.phone))
-      ) {
-        throw new BadRequestException('Phone number must be unique!');
+      if (newData.password) {
+        const isMatch = await bcrypt.compare(newData.password, user.password);
+
+        let password = user.password;
+
+        if (!isMatch) {
+          password = await bcrypt.hash(newData.password, saltOrRounds);
+        }
+
+        newData.password = password;
+      } else {
+        delete newData.password;
       }
-
-      const isMatch = await bcrypt.compare(newData.password, user.password);
-
-      let password = user.password;
-
-      if (!isMatch) {
-        password = await bcrypt.hash(newData.password, saltOrRounds);
-      }
-
-      newData.password = password;
 
       return await user.update(newData);
     } catch (error) {

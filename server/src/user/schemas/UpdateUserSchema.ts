@@ -70,10 +70,11 @@ export class UpdateUserSchema {
     example: 'password',
     type: 'string',
   })
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  password: string;
+  password?: string = null;
 
   constructor() {
     this.groupId = null;

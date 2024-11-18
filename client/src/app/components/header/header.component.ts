@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit {
       case 1: {
         this.items.push(
           {
-            label: 'Викладачі',
+            label: 'Викладачі та адміністратори',
             icon: 'pi pi-user',
             routerLink: ['/teachers']
           },

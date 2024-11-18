@@ -45,6 +45,7 @@ export class GroupDto {
   constructor(group: Group) {
     this.id = group.id;
     this.title = group.title;
+    this.year = group.year;
     this.createdAt = group.createdAt;
     this.updatedAt = group.updatedAt;
   }
