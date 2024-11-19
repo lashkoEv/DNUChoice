@@ -24,7 +24,7 @@ export class RegistrationComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.groupService.findAll().subscribe(groups => {
+    this.groupService.findAllForRegistration().subscribe(groups => {
       this.groups = groups;
     });
   }

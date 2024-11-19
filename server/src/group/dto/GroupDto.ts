@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Group } from '../group.model';
+import { UserDto } from '../../user/dto/UserDto';
+import { User } from '../../user/user.model';
 
 export class GroupDto {
   @ApiProperty({
@@ -42,11 +44,18 @@ export class GroupDto {
   })
   updatedAt: Date;
 
+  @ApiProperty({
+    type: [UserDto],
+    description: 'List of users in the group',
+  })
+  users: UserDto[];
+
   constructor(group: Group) {
     this.id = group.id;
     this.title = group.title;
     this.year = group.year;
     this.createdAt = group.createdAt;
     this.updatedAt = group.updatedAt;
+    this.users = group.users?.map((user: User) => new UserDto(user)) || [];
   }
 }

@@ -46,7 +46,7 @@ export class HeaderComponent implements OnInit {
           {
             label: 'Групи',
             icon: 'pi pi-graduation-cap',
-            routerLink: ['/teachers']
+            routerLink: ['/groups']
           },
           {
             label: 'Дисципліни',

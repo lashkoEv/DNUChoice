@@ -5,12 +5,14 @@ import {ErrorComponent} from './components/error/error.component';
 import {MainComponent} from './components/main/main.component';
 import {AuthorizationComponent} from './components/authorization/authorization.component';
 import {TeacherComponent} from './components/teacher/teacher.component';
+import {GroupComponent} from './components/group/group.component';
 
 const routes: Routes = [
   {path: '', component: MainComponent},
   {path: 'registration', component: RegistrationComponent},
   {path: 'authorization', component: AuthorizationComponent},
   {path: 'teachers', component: TeacherComponent},
+  {path: 'groups', component: GroupComponent},
   {path: '**', component: ErrorComponent},
 ];
 

@@ -9,6 +9,7 @@ import {
   UseGuards,
   Put,
   Query,
+  Patch,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupSchema } from './schemas/CreateGroupSchema';
@@ -71,6 +72,8 @@ export class GroupController {
     const count = await this.groupService.count(scopes);
 
     if (count) {
+      scopes.push('withUsers');
+
       groups = await this.groupService.findAll(scopes);
     }
 
@@ -132,6 +135,18 @@ export class GroupController {
     const result = await this.groupService.findOne(params.id, []);
 
     return new GroupDto(result);
+  }
+
+  @ApiOperation({ summary: 'Updates a group with specified id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Patch('year')
+  async updateYear() {
+    await this.groupService.updateYear();
   }
 
   @ApiOperation({ summary: 'Delete group by id' })

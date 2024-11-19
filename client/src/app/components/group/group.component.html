@@ -1,0 +1,267 @@
+<div class="user-list-container">
+  <div class="container-header mb-3">
+    <div class="search-container">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          placeholder="Пошук"
+          (input)="applyFilter($event)"
+        />
+      </span>
+    </div>
+
+    <div class="button-container">
+      <button
+        pButton
+        label="Наступний курс"
+        icon="pi pi-angle-double-up"
+        class="p-button-success p-button-outlined"
+        (click)="confirmNewYear($event)"></button>
+
+      <button
+        pButton
+        label="Додати групу"
+        icon="pi pi-plus"
+        class="p-button-success"
+        (click)="openAddGroupDialog()"></button>
+      </div>
+  </div>
+
+  <p-table
+    [value]="filteredGroups"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="5"
+    [sortMode]="'multiple'"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id">ID
+          <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="title">Шифр групи
+          <p-sortIcon field="title"></p-sortIcon>
+        </th>
+        <th pSortableColumn="year">Курс
+          <p-sortIcon field="year"></p-sortIcon>
+        </th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-group>
+      <tr>
+        <td>{{ group.id }}</td>
+        <td>{{ group.title }}</td>
+        <td>{{ group.year }}</td>
+        <td>
+          <button
+            pButton
+            icon="pi pi-pencil"
+            class="p-button-warning"
+            (click)="editGroup(group)"
+          ></button>
+        </td>
+        <td>
+          <button
+            pButton
+            icon="pi pi-trash"
+            class="p-button-danger"
+            (click)="confirmDelete($event, group.id)"
+          ></button>
+        </td>
+        <td>
+          <button
+            pButton
+            icon="pi pi-eye"
+            class="p-button-accent"
+            (click)="viewGroupDetails(group)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6">Дані не знайдені...</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="displayGroupDialog"
+  [header]="'Детальна інформація'"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{width: '600px'}"
+  [modal]="true"
+  [baseZIndex]="10000">
+
+  <ng-template pTemplate="content">
+    <div *ngIf="selectedGroup">
+      <p><strong>ID:</strong> {{ selectedGroup.id }}</p>
+      <p><strong>Шифр групи:</strong> {{ selectedGroup.title }}</p>
+      <p><strong>Курс:</strong> {{ selectedGroup.year }}</p>
+      <p><strong>Дата створення запису:</strong> {{ selectedGroup.createdAt | date:'dd.MM.yyyy HH:mm' }}</p>
+      <p><strong>Дата оновлення запису:</strong> {{ selectedGroup.updatedAt | date:'dd.MM.yyyy HH:mm' }}</p>
+      <div *ngIf="users.length">
+        <p-table
+          [value]="users"
+          [tableStyle]="{ 'height': '200px' }"
+          [paginator]="true"
+          [rows]="5">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Студенти:</th>
+              <th style="width: 5rem"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-user>
+            <tr>
+              <td>{{ user.name }}</td>
+              <td>
+                <p-button icon="pi pi-eye" [rounded]="true" [text]="true" [style]="{ padding: 0, height: '1.3rem', width: '1.3rem'}" />
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+      <div *ngIf="!users.length">
+        <p><strong>Група не містить студентів!</strong></p>
+      </div>
+    </div>
+    <div *ngIf="!selectedGroup">
+      <p>Інформація відсутня.</p>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="displayAddGroupDialog"
+  [header]="'Додати нову групу'"
+  [closable]="true"
+  [modal]="true"
+  [style]="{width: '600px'}"
+  [baseZIndex]="10000">
+
+  <ng-template pTemplate="content">
+    <form [formGroup]="addGroupForm">
+      <div class="p-fluid form-container">
+        <div class="p-field fullSize">
+          <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-id-card"></i>
+            </span>
+
+            <input
+              id="title"
+              type="text"
+              pInputText
+              formControlName="title"
+              placeholder="Шифр групи"
+            />
+          </p-inputGroup>
+          <small *ngIf="addGroupForm.get('title')?.invalid && addGroupForm.get('title')?.touched" class="p-error">
+            Введіть коректний шифр!
+          </small>
+        </div>
+
+        <div class="p-field fullSize">
+          <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-graduation-cap"></i>
+            </span>
+            <input
+              id="year"
+              type="number"
+              pInputText
+              formControlName="year"
+              placeholder="Курс"
+              (input)="onYearInputAdd($event)"
+              [min]="1"
+            />
+          </p-inputGroup>
+          <small *ngIf="addGroupForm.get('year')?.hasError('positiveNumber') && addGroupForm.get('year')?.touched" class="p-error">
+            Введіть коректний курс! Курс повинен бути більше 0.
+          </small>
+          <small *ngIf="addGroupForm.get('year')?.hasError('required') && addGroupForm.get('year')?.touched" class="p-error">
+            Курс обов'язковий!
+          </small>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton label="Зберегти" icon="pi pi-check" (click)="saveGroup()" [disabled]="addGroupForm.invalid"></button>
+    <button pButton label="Скасувати" icon="pi pi-times" (click)="closeAddGroupDialog()" class="p-button-text"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="displayEditGroupDialog"
+  [header]="'Редагування інформації про групу'"
+  [closable]="true"
+  [modal]="true"
+  [style]="{width: '600px'}"
+  [baseZIndex]="10000">
+
+  <ng-template pTemplate="content">
+    <form [formGroup]="editGroupForm">
+      <div class="p-fluid form-container">
+        <div class="p-field fullSize">
+          <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-id-card"></i>
+            </span>
+            <input
+              id="titleUpdate"
+              type="text"
+              pInputText
+              formControlName="titleUpdate"
+              placeholder="Шифр групи"
+            />
+          </p-inputGroup>
+          <small *ngIf="editGroupForm.get('titleUpdate')?.invalid && editGroupForm.get('titleUpdate')?.touched" class="p-error">
+            Введіть коректний шифр!
+          </small>
+        </div>
+
+        <div class="p-field fullSize">
+          <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-graduation-cap"></i>
+            </span>
+            <input
+              id="yearUpdate"
+              type="number"
+              pInputText
+              formControlName="yearUpdate"
+              placeholder="Email"
+              (input)="onYearInputEdit($event)"
+              [min]="1"
+            />
+          </p-inputGroup>
+          <small *ngIf="addGroupForm.get('yearUpdate')?.hasError('positiveNumber') && addGroupForm.get('yearUpdate')?.touched" class="p-error">
+            Введіть коректний курс! Курс повинен бути більше 0.
+          </small>
+          <small *ngIf="addGroupForm.get('yearUpdate')?.hasError('required') && addGroupForm.get('yearUpdate')?.touched" class="p-error">
+            Курс обов'язковий!
+          </small>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton label="Зберегти" icon="pi pi-check" (click)="saveEditedGroup()" [disabled]="editGroupForm.invalid"></button>
+    <button pButton label="Скасувати" icon="pi pi-times" (click)="closeEditGroupDialog()" class="p-button-text"></button>
+  </ng-template>
+</p-dialog>

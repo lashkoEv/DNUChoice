@@ -21,7 +21,7 @@ import { Group } from '../group/group.model';
   byId: (id: number) => ({
     where: { id },
   }),
-  byPage: (limit: number = 10, offset: number = 0) => ({
+  byPage: (limit: number = null, offset: number = 0) => ({
     limit,
     offset,
   }),

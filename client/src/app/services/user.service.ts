@@ -136,4 +136,13 @@ export class UserService {
       })
     );
   }
+
+  getHeaders() {
+    const user = this.userSubject.getValue();
+    const token = user?.session.token;
+
+    return token
+      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
+      : new HttpHeaders();
+  }
 }

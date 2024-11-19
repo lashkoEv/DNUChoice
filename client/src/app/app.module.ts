@@ -24,6 +24,8 @@ import { TeacherComponent } from './components/teacher/teacher.component';
 import { TableModule } from 'primeng/table';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DialogModule } from 'primeng/dialog';
+import { GroupComponent } from './components/group/group.component';
+import { ListboxModule } from 'primeng/listbox';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { DialogModule } from 'primeng/dialog';
     HeaderComponent,
     ErrorComponent,
     MainComponent,
-    TeacherComponent
+    TeacherComponent,
+    GroupComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +55,8 @@ import { DialogModule } from 'primeng/dialog';
     TableModule,
     ConfirmPopupModule,
     DialogModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ListboxModule
   ],
   providers: [MessageService, ConfirmationService, HttpClient],
   bootstrap: [AppComponent]

@@ -60,4 +60,12 @@ export class GroupService {
   async remove(group: Group) {
     await group.destroy();
   }
+
+  async updateYear() {
+    const groups = await this.groupModel.findAll();
+
+    const ids = groups.map((item) => item.id);
+
+    await Group.increment({ year: 1 }, { where: { id: ids } });
+  }
 }
