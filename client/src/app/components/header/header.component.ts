@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {UserService} from '../../services/user.service';
-import {Observable} from 'rxjs';
-import {Router} from '@angular/router';
-import {UserRoles} from '../../enums/userRoles';
+import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../services/user.service';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { UserRoles } from '../../enums/userRoles';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit {
   items: any[];
@@ -37,23 +37,23 @@ export class HeaderComponent implements OnInit {
           {
             label: 'Викладачі та адміністратори',
             icon: 'pi pi-user',
-            routerLink: ['/teachers']
+            routerLink: ['/teachers'],
           },
           {
             label: 'Студенти',
             icon: 'pi pi-users',
-            routerLink: ['/teachers']
+            routerLink: ['/students'],
           },
           {
             label: 'Групи',
             icon: 'pi pi-graduation-cap',
-            routerLink: ['/groups']
+            routerLink: ['/groups'],
           },
           {
             label: 'Дисципліни',
             icon: 'pi pi-file',
-            routerLink: ['/teachers']
-          }
+            routerLink: ['/disciplines'],
+          },
         );
         break;
       }
@@ -62,18 +62,18 @@ export class HeaderComponent implements OnInit {
           {
             label: 'Студенти',
             icon: 'pi pi-users',
-            routerLink: ['/teachers']
+            routerLink: ['/students'],
           },
           {
             label: 'Групи',
             icon: 'pi pi-graduation-cap',
-            routerLink: ['/teachers']
+            routerLink: ['/groups'],
           },
           {
             label: 'Дисципліни',
             icon: 'pi pi-file',
-            routerLink: ['/teachers']
-          }
+            routerLink: ['/disciplines'],
+          },
         );
         break;
       }
@@ -82,13 +82,13 @@ export class HeaderComponent implements OnInit {
           {
             label: 'Мій профіль',
             icon: 'pi pi-user',
-            routerLink: ['/profile']
+            routerLink: ['/profile'],
           },
           {
             label: 'Обрати дисципліну',
             icon: 'pi pi-plus-circle',
-            routerLink: ['/#']
-          }
+            routerLink: ['/#'],
+          },
         );
         break;
       }

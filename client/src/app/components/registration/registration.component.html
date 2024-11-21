@@ -41,7 +41,8 @@
 
     <div *ngIf="passwordModel.invalid && passwordModel.touched">
       <small *ngIf="passwordModel.errors?.['required']" class="p-error">Пароль не може бути пустим!</small>
-      <small *ngIf="passwordModel.errors?.['minlength']" class="p-error">Пароль повинен бути не менше 6 символів!</small>
+      <small *ngIf="passwordModel.errors?.['minlength']" class="p-error">Пароль повинен бути не менше 6
+        символів!</small>
     </div>
 
     <p-inputGroup class="mt-3">

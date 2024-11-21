@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {BehaviorSubject, catchError, Observable} from 'rxjs';
-import {MessageService} from 'primeng/api';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, catchError, Observable } from 'rxjs';
+import { MessageService } from 'primeng/api';
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +36,7 @@ export class UserService {
           detail: 'Перевірте введені дані!',
         });
         throw err;
-      })
+      }),
     );
   }
 
@@ -68,7 +68,7 @@ export class UserService {
           detail: 'Перевірте введені дані! Можливо, користувач з такою поштою вже існує.',
         });
         throw err;
-      })
+      }),
     );
   }
 
@@ -93,7 +93,7 @@ export class UserService {
           detail: 'Не вдалося отримати список користувачів.',
         });
         throw err;
-      })
+      }),
     );
   }
 
@@ -113,7 +113,7 @@ export class UserService {
           detail: 'Не вдалося видалити користувача.',
         });
         throw err;
-      })
+      }),
     );
   }
 
@@ -133,7 +133,7 @@ export class UserService {
           detail: 'Перевірте введені дані! Можливо, користувач з такою поштою вже існує.',
         });
         throw err;
-      })
+      }),
     );
   }
 

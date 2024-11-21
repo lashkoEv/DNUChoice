@@ -28,7 +28,7 @@ import { StudentDiscipline } from '../student-discipline/student-discipline.mode
     include: [
       {
         model: User,
-        through: { attributes: [] },
+        through: { attributes: ['forSemester', 'forYear'] },
       },
     ],
     subQuery: false,

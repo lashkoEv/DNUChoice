@@ -59,7 +59,7 @@ import { StudentDiscipline } from '../student-discipline/student-discipline.mode
     include: [
       {
         model: Discipline,
-        through: { attributes: [] },
+        through: { attributes: ['forSemester', 'forYear'] },
       },
     ],
     subQuery: false,

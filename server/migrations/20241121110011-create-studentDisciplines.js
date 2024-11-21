@@ -9,6 +9,8 @@ module.exports = {
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         studentId INT NOT NULL,
         disciplineId INT NOT NULL,
+        forSemester TINYINT NOT NULL,
+        forYear TINYINT NOT NULL,
         createdAt TIMESTAMP NOT NULL DEFAULT NOW(),
         updatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
         

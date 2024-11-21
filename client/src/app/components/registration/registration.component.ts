@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {MessageService} from 'primeng/api';
-import {UserService} from '../../services/user.service';
-import {Router} from '@angular/router';
-import {GroupService} from '../../services/group.service';
-import {Group} from '../../interfaces/IGroup';
-import {UserRoles} from '../../enums/userRoles';
+import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
+import { GroupService } from '../../services/group.service';
+import { Group } from '../../interfaces/IGroup';
+import { UserRoles } from '../../enums/userRoles';
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrl: './registration.component.css'
+  styleUrl: './registration.component.css',
 })
 export class RegistrationComponent implements OnInit {
   constructor(private messageService: MessageService, private userService: UserService, private router: Router, private groupService: GroupService) {
@@ -36,18 +36,26 @@ export class RegistrationComponent implements OnInit {
       password: this.password,
       name: this.fullName,
       groupId: this.group,
-      role: UserRoles.student
+      role: UserRoles.student,
     };
 
     await this.userService.register(registrationData).subscribe((data: any) => {
       if (!data) {
-        this.messageService.add({ severity: 'error', summary: 'Помилка реєстрації!', detail: 'Перевірте введені дані!' });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Помилка реєстрації!',
+          detail: 'Перевірте введені дані!',
+        });
 
         return;
       }
 
       this.userService.setUser(data);
-      this.messageService.add({ severity: 'success', summary: 'Реєстрація успішна!', detail: 'Ви успішно зареєструвалися!' });
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Реєстрація успішна!',
+        detail: 'Ви успішно зареєструвалися!',
+      });
       this.router.navigate(['/']);
     });
   }

@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {MessageService} from 'primeng/api';
-import {BehaviorSubject, catchError, map, Observable} from 'rxjs';
-import {UserService} from './user.service';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { MessageService } from 'primeng/api';
+import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
+import { UserService } from './user.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GroupService {
   private groupsSubject = new BehaviorSubject<any[]>([]);
@@ -29,7 +29,7 @@ export class GroupService {
           this.messageService.add({
             severity: 'error',
             summary: 'Помилка!',
-            detail: 'Не вдалося отримати дані про групи.'
+            detail: 'Не вдалося отримати дані про групи.',
           });
         }
       }),
@@ -37,17 +37,17 @@ export class GroupService {
         this.messageService.add({
           severity: 'error',
           summary: 'Помилка!',
-          detail: 'Не вдалося отримати дані про групи.'
+          detail: 'Не вдалося отримати дані про групи.',
         });
         throw error;
-      })
+      }),
     );
   }
 
   create(data: Object) {
     const headers = this.userService.getHeaders();
 
-    return this.http.post(this.apiUrl, data, {headers}).pipe(
+    return this.http.post(this.apiUrl, data, { headers }).pipe(
       catchError((err) => {
         this.messageService.add({
           severity: 'error',
@@ -55,7 +55,7 @@ export class GroupService {
           detail: 'Могла статись помилка на серврі...',
         });
         throw err;
-      })
+      }),
     );
   }
 
@@ -68,14 +68,14 @@ export class GroupService {
           detail: 'Не вдалося отримати список груп.',
         });
         throw err;
-      })
+      }),
     );
   }
 
   delete(groupId: number): Observable<void> {
     const headers = this.userService.getHeaders();
 
-    return this.http.delete<void>(`${this.apiUrl}/${groupId}`, {headers}).pipe(
+    return this.http.delete<void>(`${this.apiUrl}/${groupId}`, { headers }).pipe(
       catchError((err) => {
         this.messageService.add({
           severity: 'error',
@@ -83,14 +83,14 @@ export class GroupService {
           detail: 'Не вдалося видалити групу.',
         });
         throw err;
-      })
+      }),
     );
   }
 
   update(groupId: number, data: any): Observable<void> {
     const headers = this.userService.getHeaders();
 
-    return this.http.put<any>(`${this.apiUrl}/${groupId}`, data, {headers}).pipe(
+    return this.http.put<any>(`${this.apiUrl}/${groupId}`, data, { headers }).pipe(
       catchError((err) => {
         this.messageService.add({
           severity: 'error',
@@ -98,7 +98,7 @@ export class GroupService {
           detail: 'Могла статись помилка на серврі...',
         });
         throw err;
-      })
+      }),
     );
   }
 
@@ -106,10 +106,10 @@ export class GroupService {
     const headers = this.userService.getHeaders();
 
     console.log(headers);
-    return this.http.patch<void>(`${this.apiUrl}/year`, {}, {headers}).pipe(
+    return this.http.patch<void>(`${this.apiUrl}/year`, {}, { headers }).pipe(
       catchError((err) => {
         throw err;
-      })
+      }),
     );
   }
 }

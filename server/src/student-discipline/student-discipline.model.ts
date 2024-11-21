@@ -39,6 +39,30 @@ export class StudentDiscipline extends Model {
   disciplineId: number;
 
   @ApiProperty({
+    description: 'For semester',
+    nullable: false,
+    example: '1',
+    type: 'integer',
+  })
+  @Column({
+    type: DataType.TINYINT,
+    allowNull: false,
+  })
+  forSemester: number;
+
+  @ApiProperty({
+    description: 'For year',
+    nullable: false,
+    example: '1',
+    type: 'integer',
+  })
+  @Column({
+    type: DataType.TINYINT,
+    allowNull: false,
+  })
+  forYear: number;
+
+  @ApiProperty({
     description: 'Created at',
     nullable: false,
     example: '2024-07-03T19:32:40.000Z',

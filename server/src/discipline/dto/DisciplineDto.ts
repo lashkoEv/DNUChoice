@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UserDto } from '../../user/dto/UserDto';
 import { User } from '../../user/user.model';
-import { Discipline } from '../discipline.model';
+import { IDiscipline } from '../entities/IDiscipline';
 
 export class DisciplineDto {
   @ApiProperty({
@@ -43,6 +43,22 @@ export class DisciplineDto {
     type: 'integer',
   })
   year: number;
+
+  @ApiProperty({
+    description: 'For semester',
+    nullable: true,
+    example: '1',
+    type: 'integer',
+  })
+  forSemester?: number;
+
+  @ApiProperty({
+    description: 'For year',
+    nullable: true,
+    example: '1',
+    type: 'integer',
+  })
+  forYear?: number;
 
   @ApiProperty({
     description: 'Catalogue type',
@@ -91,12 +107,14 @@ export class DisciplineDto {
   })
   users: UserDto[];
 
-  constructor(discipline: Discipline) {
+  constructor(discipline: IDiscipline) {
     this.id = discipline.id;
     this.code = discipline.code;
     this.title = discipline.title;
     this.semester = discipline.semester;
     this.year = discipline.year;
+    this.forSemester = discipline.StudentDiscipline?.forSemester || undefined;
+    this.forYear = discipline.StudentDiscipline?.forYear || undefined;
     this.catalogueType = discipline.catalogueType;
     this.educationalLevel = discipline.educationalLevel;
     this.link = discipline.link;

@@ -64,6 +64,22 @@ export class UserDto {
   disciplines: DisciplineDto[];
 
   @ApiProperty({
+    description: 'For semester',
+    nullable: true,
+    example: '1',
+    type: 'integer',
+  })
+  forSemester?: number;
+
+  @ApiProperty({
+    description: 'For year',
+    nullable: true,
+    example: '1',
+    type: 'integer',
+  })
+  forYear?: number;
+
+  @ApiProperty({
     description: 'Created at',
     nullable: false,
     example: '2024-07-03T19:32:40.000Z',
@@ -90,6 +106,7 @@ export class UserDto {
     updatedAt,
     token,
     disciplines,
+    StudentDiscipline
   }: IUser) {
     this.id = id;
     this.name = name;
@@ -103,5 +120,7 @@ export class UserDto {
     this.disciplines = disciplines
       ? disciplines.map((item) => new DisciplineDto(item))
       : undefined;
+    this.forSemester = StudentDiscipline?.forSemester || undefined;
+    this.forYear = StudentDiscipline?.forYear || undefined;
   }
 }

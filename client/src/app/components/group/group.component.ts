@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {GroupService} from '../../services/group.service';
-import {Observable, of} from 'rxjs';
-import {UserService} from '../../services/user.service';
-import {UserRoles} from '../../enums/userRoles';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { GroupService } from '../../services/group.service';
+import { Observable, of } from 'rxjs';
+import { UserService } from '../../services/user.service';
+import { UserRoles } from '../../enums/userRoles';
 
 @Component({
   selector: 'app-group',
   templateUrl: './group.component.html',
-  styleUrl: './group.component.css'
+  styleUrl: './group.component.css',
 })
 export class GroupComponent implements OnInit {
   groups: any[] = [];
@@ -28,16 +28,16 @@ export class GroupComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private userService: UserService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.addGroupForm = this.fb.group({
       title: ['', Validators.required],
-      year: ['', Validators.required, this.positiveNumberValidator]
+      year: ['', Validators.required, this.positiveNumberValidator],
     });
 
     this.editGroupForm = this.fb.group({
       titleUpdate: ['', Validators.required],
-      yearUpdate: ['', Validators.required, this.positiveNumberValidator]
+      yearUpdate: ['', Validators.required, this.positiveNumberValidator],
     });
   }
 
@@ -94,7 +94,7 @@ export class GroupComponent implements OnInit {
       (group) =>
         String(group.id).toLowerCase().includes(query) ||
         group.title.toLowerCase().includes(query) ||
-        String(group.year).toLowerCase().includes(query)
+        String(group.year).toLowerCase().includes(query),
     );
   }
 
@@ -180,7 +180,7 @@ export class GroupComponent implements OnInit {
 
   viewGroupDetails(group: any) {
     this.selectedGroup = group;
-    this.users = group.users.map((user: any) => ({ name: user.name, code: user.email }))
+    this.users = group.users;
     this.displayGroupDialog = true;
   }
 
@@ -202,13 +202,13 @@ export class GroupComponent implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Успіх!',
-            detail: 'Групу успішно додано!'
+            detail: 'Групу успішно додано!',
           });
           this.fetchGroups();
           this.closeAddGroupDialog();
         },
         error: () => {
-        }
+        },
       });
     }
   }
@@ -232,19 +232,20 @@ export class GroupComponent implements OnInit {
       const updatedGroup = {
         title: this.editGroupForm.value.titleUpdate,
         year: this.editGroupForm.value.yearUpdate,
-      }
+      };
 
       this.groupService.update(this.selectedGroup.id, updatedGroup).subscribe({
         next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Успіх!',
-            detail: 'Дані про групу успішно оновлено!'
+            detail: 'Дані про групу успішно оновлено!',
           });
           this.fetchGroups();
           this.closeEditGroupDialog();
         },
-        error: () => {}
+        error: () => {
+        },
       });
     }
   }

@@ -1,4 +1,4 @@
-<div *ngIf="getRole() === UserRoles.admin">
+<div *ngIf="getRole() === UserRoles.admin || getRole() === UserRoles.teacher">
   <div class="user-list-container">
     <div class="container-header mb-3">
       <div class="search-container">
@@ -101,7 +101,7 @@
     [header]="'Детальна інформація'"
     [closable]="true"
     [dismissableMask]="true"
-    [style]="{width: '600px'}"
+    [style]="{width: '1000px'}"
     [modal]="true"
     [baseZIndex]="10000">
 
@@ -115,22 +115,18 @@
         <div *ngIf="users.length">
           <p-table
             [value]="users"
-            [tableStyle]="{ 'height': '200px' }"
             [paginator]="true"
             [rows]="5">
             <ng-template pTemplate="header">
               <tr>
-                <th>Студенти:</th>
-                <th style="width: 5rem"></th>
+                <th pSortableColumn="name">Студенти
+                  <p-sortIcon field="name"></p-sortIcon>
+                </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-user>
               <tr>
                 <td>{{ user.name }}</td>
-                <td>
-                  <p-button icon="pi pi-eye" [rounded]="true" [text]="true"
-                            [style]="{ padding: 0, height: '1.3rem', width: '1.3rem'}"/>
-                </td>
               </tr>
             </ng-template>
           </p-table>
@@ -280,7 +276,7 @@
   </p-dialog>
 </div>
 
-<div *ngIf="getRole() !== UserRoles.admin" class="ban">
+<div *ngIf="getRole() !== UserRoles.admin && getRole() !== UserRoles.teacher" class="ban">
   <i class="pi pi-lock ban-icon"></i>
 
   <div class="ban-text">

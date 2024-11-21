@@ -1,58 +1,53 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserRoles } from '../../enums/userRoles';
+import { Group } from '../../interfaces/IGroup';
+import { GroupService } from '../../services/group.service';
 
 @Component({
-  selector: 'app-teacher',
-  templateUrl: './teacher.component.html',
-  styleUrls: ['./teacher.component.css'],
+  selector: 'app-student',
+  templateUrl: './student.component.html',
+  styleUrl: './student.component.css',
 })
-export class TeacherComponent implements OnInit {
+export class StudentComponent {
   users: any[] = [];
   filteredUsers: any[] = [];
   selectedUser: any = null;
   displayUserDialog: boolean = false;
   loading: boolean = true;
-  displayAddUserDialog: boolean = false;
-  addUserForm: FormGroup;
   displayEditUserDialog: boolean = false;
   editUserForm: FormGroup;
-
-  roles = [
-    { label: 'Викладач', value: UserRoles.teacher },
-    { label: 'Адміністратор', value: UserRoles.admin },
-  ];
+  groups: Group[] = [];
+  disciplines: any = null;
 
   constructor(
     private userService: UserService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private groupService: GroupService,
     private fb: FormBuilder,
   ) {
-    this.addUserForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      role: [null, Validators.required],
-    });
-
     this.editUserForm = this.fb.group({
       nameUpdate: ['', Validators.required],
+      group: ['', Validators.required],
       emailUpdate: ['', [Validators.required, Validators.email]],
       passwordUpdate: ['', []],
-      roleUpdate: [null, Validators.required],
     });
   }
 
   ngOnInit(): void {
     this.fetchUsers();
+
+    this.groupService.findAllForRegistration().subscribe(groups => {
+      this.groups = groups;
+    });
   }
 
   fetchUsers() {
     this.loading = true;
-    this.userService.getUsersByRole([UserRoles.admin, UserRoles.teacher]).subscribe({
+    this.userService.getUsersByRole([UserRoles.student]).subscribe({
       next: (data: any) => {
         this.users = data.data;
         this.filteredUsers = [...this.users];
@@ -77,7 +72,8 @@ export class TeacherComponent implements OnInit {
       (user) =>
         String(user.id).toLowerCase().includes(query) ||
         user.name.toLowerCase().includes(query) ||
-        user.email.toLowerCase().includes(query),
+        user.email.toLowerCase().includes(query) ||
+        (user.group ? user.group.title.toLowerCase().includes(query) : 'немає'.includes(query)),
     );
   }
 
@@ -123,37 +119,8 @@ export class TeacherComponent implements OnInit {
 
   viewUserDetails(user: any) {
     this.selectedUser = user;
+    this.disciplines = this.selectedUser.disciplines;
     this.displayUserDialog = true;
-  }
-
-  openAddUserDialog() {
-    this.displayAddUserDialog = true;
-  }
-
-  closeAddUserDialog() {
-    this.displayAddUserDialog = false;
-    this.addUserForm.reset();
-  }
-
-  saveUser() {
-    if (this.addUserForm.valid) {
-      const newUser = this.addUserForm.value;
-      newUser.role = newUser.role.value;
-
-      this.userService.register(newUser).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Успіх!',
-            detail: 'Користувача успішно додано!',
-          });
-          this.fetchUsers();
-          this.closeAddUserDialog();
-        },
-        error: () => {
-        },
-      });
-    }
   }
 
   editUser(user: any) {
@@ -162,7 +129,7 @@ export class TeacherComponent implements OnInit {
     this.editUserForm.patchValue({
       nameUpdate: user.name,
       emailUpdate: user.email,
-      roleUpdate: user.role === 2 ? this.roles[0] : this.roles[1],
+      group: this.groups.find(group => group.id === user.group?.id) || '',
       passwordUpdate: '',
     });
   }
@@ -177,7 +144,8 @@ export class TeacherComponent implements OnInit {
       const updatedUser = {
         name: this.editUserForm.value.nameUpdate,
         email: this.editUserForm.value.emailUpdate,
-        role: this.editUserForm.value.roleUpdate.value,
+        groupId: this.editUserForm.value.group.id,
+        role: UserRoles.student,
       };
 
       if (this.editUserForm.value.passwordUpdate) {
