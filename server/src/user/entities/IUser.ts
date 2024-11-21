@@ -1,4 +1,5 @@
 import { Group } from '../../group/group.model';
+import { Discipline } from '../../discipline/discipline.model';
 
 export interface IUser {
   id: number;
@@ -10,4 +11,5 @@ export interface IUser {
   updatedAt: Date;
   token?: string;
   group?: Group;
+  disciplines?: Discipline[];
 }

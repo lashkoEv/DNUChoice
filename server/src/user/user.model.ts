@@ -4,6 +4,7 @@ import {
   AllowNull,
   AutoIncrement,
   BelongsTo,
+  BelongsToMany,
   Column,
   CreatedAt,
   DataType,
@@ -16,6 +17,8 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { Group } from '../group/group.model';
+import { Discipline } from '../discipline/discipline.model';
+import { StudentDiscipline } from '../student-discipline/student-discipline.model';
 
 @Scopes(() => ({
   byId: (id: number) => ({
@@ -50,6 +53,16 @@ import { Group } from '../group/group.model';
         subQuery: false,
       },
     ],
+    subQuery: false,
+  }),
+  withDisciplines: () => ({
+    include: [
+      {
+        model: Discipline,
+        through: { attributes: [] },
+      },
+    ],
+    subQuery: false,
   }),
 }))
 @Table({
@@ -125,9 +138,6 @@ export class User extends Model {
   @ForeignKey(() => Group)
   groupId: number;
 
-  @BelongsTo(() => Group)
-  group: Group;
-
   @ApiProperty({
     description: 'Created at',
     nullable: false,
@@ -149,4 +159,10 @@ export class User extends Model {
   @AllowNull(false)
   @Column({ type: DataType.DATE })
   updatedAt: Date;
+
+  @BelongsTo(() => Group)
+  group: Group;
+
+  @BelongsToMany(() => Discipline, () => StudentDiscipline)
+  disciplines: Discipline[];
 }

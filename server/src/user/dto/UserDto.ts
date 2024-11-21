@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IUser } from '../entities/IUser';
 import { SessionDto } from 'src/session/dto/SessionDto';
 import { GroupDto } from '../../group/dto/GroupDto';
+import { DisciplineDto } from '../../discipline/dto/DisciplineDto';
 
 export class UserDto {
   @ApiProperty({
@@ -58,6 +59,11 @@ export class UserDto {
   group: GroupDto;
 
   @ApiProperty({
+    type: [DisciplineDto],
+  })
+  disciplines: DisciplineDto[];
+
+  @ApiProperty({
     description: 'Created at',
     nullable: false,
     example: '2024-07-03T19:32:40.000Z',
@@ -83,6 +89,7 @@ export class UserDto {
     createdAt,
     updatedAt,
     token,
+    disciplines,
   }: IUser) {
     this.id = id;
     this.name = name;
@@ -93,5 +100,8 @@ export class UserDto {
     this.updatedAt = updatedAt;
     this.session = token ? new SessionDto(token) : undefined;
     this.group = group ? new GroupDto(group) : undefined;
+    this.disciplines = disciplines
+      ? disciplines.map((item) => new DisciplineDto(item))
+      : undefined;
   }
 }

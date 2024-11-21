@@ -12,15 +12,15 @@ module.exports = {
         password VARCHAR(255) NOT NULL,
         role TINYINT NOT NULL COMMENT '1 - admin, 2 - teacher, 3 - student',
         groupId INT DEFAULT NULL,
-        createdAt TIMESTAMP NOT NULL,
-        updatedAt TIMESTAMP NOT NULL,
+        createdAt TIMESTAMP NOT NULL DEFAULT NOW(),
+        updatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
         
-        CONSTRAINT usersGroupId FOREIGN KEY (groupId) REFERENCES academicGroups(id) ON DELETE SET NULL ON UPDATE RESTRICT
+        CONSTRAINT usersAcademicGroupsGroupId FOREIGN KEY (groupId) REFERENCES academicGroups(id) ON DELETE SET NULL ON UPDATE RESTRICT
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci`,
     );
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.sequelize.query('DROP TABLE IF EXISTS users');
+    await queryInterface.sequelize.query('DROP TABLE IF EXISTS users;');
   },
 };

@@ -70,6 +70,7 @@ export class UserController {
       scopes.push(
         { method: ['byPage', query.limit, query.offset] },
         'withGroup',
+        'withDisciplines',
       );
 
       users = await this.userService.findAll(scopes);

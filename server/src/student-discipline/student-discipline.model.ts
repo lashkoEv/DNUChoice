@@ -4,40 +4,23 @@ import {
   Column,
   CreatedAt,
   DataType,
-  HasMany,
+  ForeignKey,
   Model,
   PrimaryKey,
-  Scopes,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '../user/user.model';
+import { Discipline } from '../discipline/discipline.model';
 
-@Scopes(() => ({
-  byId: (id: number) => ({
-    where: { id },
-  }),
-  byPage: (limit: number = null, offset: number = 0) => ({
-    limit,
-    offset,
-  }),
-  withUsers: () => ({
-    include: [
-      {
-        model: User,
-      },
-    ],
-    subQuery: false,
-  }),
-}))
 @Table({
-  tableName: 'academicGroups',
+  tableName: 'studentDisciplines',
   timestamps: true,
 })
-export class Group extends Model {
+export class StudentDiscipline extends Model {
   @ApiProperty({
-    description: 'Group identifier',
+    description: 'Identifier',
     nullable: false,
     example: 1,
     type: 'integer',
@@ -47,28 +30,13 @@ export class Group extends Model {
   @Column(DataType.INTEGER)
   id: number;
 
-  @ApiProperty({
-    description: 'Title',
-    nullable: false,
-    example: 'PZ-23m-2',
-    type: 'string',
-  })
-  @AllowNull(false)
-  @Column(DataType.STRING(255))
-  title: string;
+  @ForeignKey(() => User)
+  @Column
+  studentId: number;
 
-  @ApiProperty({
-    description: 'Year',
-    nullable: false,
-    example: '1',
-    type: 'integer',
-  })
-  @AllowNull(false)
-  @Column(DataType.TINYINT)
-  year: number;
-
-  @HasMany(() => User)
-  users: User[];
+  @ForeignKey(() => Discipline)
+  @Column
+  disciplineId: number;
 
   @ApiProperty({
     description: 'Created at',
