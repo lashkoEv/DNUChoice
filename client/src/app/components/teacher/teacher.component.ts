@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../services/user.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UserRoles} from '../../enums/userRoles';
 
 @Component({
   selector: 'app-teacher',
@@ -20,8 +21,8 @@ export class TeacherComponent implements OnInit {
   editUserForm: FormGroup;
 
   roles = [
-    {label: 'Викладач', value: 2},
-    {label: 'Адміністратор', value: 1}
+    {label: 'Викладач', value: UserRoles.teacher},
+    {label: 'Адміністратор', value: UserRoles.admin}
   ];
 
 
@@ -52,7 +53,7 @@ export class TeacherComponent implements OnInit {
 
   fetchUsers() {
     this.loading = true;
-    this.userService.getUsersByRole([1, 2]).subscribe({
+    this.userService.getUsersByRole([UserRoles.admin, UserRoles.teacher]).subscribe({
       next: (data: any) => {
         this.users = data.data;
         this.filteredUsers = [...this.users];
@@ -198,4 +199,10 @@ export class TeacherComponent implements OnInit {
       });
     }
   }
+
+  getRole() {
+    return this.userService.getUserRole();
+  }
+
+  protected readonly UserRoles = UserRoles;
 }

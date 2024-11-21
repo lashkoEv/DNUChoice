@@ -3,6 +3,8 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {GroupService} from '../../services/group.service';
 import {Observable, of} from 'rxjs';
+import {UserService} from '../../services/user.service';
+import {UserRoles} from '../../enums/userRoles';
 
 @Component({
   selector: 'app-group',
@@ -25,6 +27,7 @@ export class GroupComponent implements OnInit {
     private groupService: GroupService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private userService: UserService,
     private fb: FormBuilder
   ) {
     this.addGroupForm = this.fb.group({
@@ -245,4 +248,10 @@ export class GroupComponent implements OnInit {
       });
     }
   }
+
+  getRole() {
+    return this.userService.getUserRole();
+  }
+
+  protected readonly UserRoles = UserRoles;
 }

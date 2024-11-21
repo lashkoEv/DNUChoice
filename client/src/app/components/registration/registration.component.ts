@@ -4,6 +4,7 @@ import {UserService} from '../../services/user.service';
 import {Router} from '@angular/router';
 import {GroupService} from '../../services/group.service';
 import {Group} from '../../interfaces/IGroup';
+import {UserRoles} from '../../enums/userRoles';
 
 @Component({
   selector: 'app-registration',
@@ -35,7 +36,7 @@ export class RegistrationComponent implements OnInit {
       password: this.password,
       name: this.fullName,
       groupId: this.group,
-      role: 3
+      role: UserRoles.student
     };
 
     await this.userService.register(registrationData).subscribe((data: any) => {

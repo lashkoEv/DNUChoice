@@ -145,4 +145,9 @@ export class UserService {
       ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
       : new HttpHeaders();
   }
+
+  getUserRole() {
+    const user = this.userSubject.getValue();
+    return user?.role || '';
+  }
 }

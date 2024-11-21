@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../services/user.service';
 import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
+import {UserRoles} from '../../enums/userRoles';
 
 @Component({
   selector: 'app-header',
@@ -31,7 +32,7 @@ export class HeaderComponent implements OnInit {
     this.items = [];
 
     switch (user.role) {
-      case 1: {
+      case UserRoles.admin: {
         this.items.push(
           {
             label: 'Викладачі та адміністратори',
@@ -56,7 +57,7 @@ export class HeaderComponent implements OnInit {
         );
         break;
       }
-      case 2: {
+      case UserRoles.teacher: {
         this.items.push(
           {
             label: 'Студенти',
@@ -76,7 +77,7 @@ export class HeaderComponent implements OnInit {
         );
         break;
       }
-      case 3: {
+      case UserRoles.student: {
         this.items.push(
           {
             label: 'Мій профіль',
