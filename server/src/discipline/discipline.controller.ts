@@ -25,7 +25,6 @@ import { CreateOrUpdateDisciplineSchema } from './schemas/CreateOrUpdateDiscipli
 import { GroupDto } from '../group/dto/GroupDto';
 import { PaginationSchema } from '../resources/dto/PaginationSchema';
 import { NumberIdSchema } from '../resources/dto/NumberIdSchema';
-import { UpdateGroupSchema } from '../group/schemas/UpdateGroupSchema';
 
 @ApiTags('Disciplines')
 @Controller('/api/disciplines')
@@ -115,7 +114,7 @@ export class DisciplineController {
   @Put(':id')
   async update(
     @Param() params: NumberIdSchema,
-    @Body() body: UpdateGroupSchema,
+    @Body() body: CreateOrUpdateDisciplineSchema,
   ) {
     await this.disciplineService.update(params.id, body);
 

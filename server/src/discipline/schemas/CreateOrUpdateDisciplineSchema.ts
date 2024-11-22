@@ -40,10 +40,9 @@ export class CreateOrUpdateDisciplineSchema {
     required: false,
   })
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @IsPositive()
-  semester?: number;
+  @IsString()
+  @MaxLength(100)
+  semester?: string;
 
   @ApiProperty({
     description: 'Year',
@@ -52,10 +51,9 @@ export class CreateOrUpdateDisciplineSchema {
     required: false,
   })
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @IsPositive()
-  year?: number;
+  @IsString()
+  @MaxLength(100)
+  year?: string;
 
   @ApiProperty({
     description: 'Catalogue type of the discipline',

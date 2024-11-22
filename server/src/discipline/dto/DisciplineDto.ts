@@ -32,17 +32,17 @@ export class DisciplineDto {
     description: 'Semester',
     nullable: true,
     example: '1',
-    type: 'integer',
+    type: 'string',
   })
-  semester: number;
+  semester: string;
 
   @ApiProperty({
     description: 'Year',
     nullable: true,
-    example: '1',
-    type: 'integer',
+    example: '1, 2',
+    type: 'string',
   })
-  year: number;
+  year: string;
 
   @ApiProperty({
     description: 'For semester',

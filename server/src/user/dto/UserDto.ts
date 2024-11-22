@@ -106,7 +106,7 @@ export class UserDto {
     updatedAt,
     token,
     disciplines,
-    StudentDiscipline
+    StudentDiscipline,
   }: IUser) {
     this.id = id;
     this.name = name;

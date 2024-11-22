@@ -76,25 +76,25 @@ export class Discipline extends Model {
     description: 'Semester',
     nullable: true,
     example: '1',
-    type: 'integer',
+    type: 'string',
   })
   @Column({
-    type: DataType.TINYINT,
+    type: DataType.STRING(100),
     allowNull: true,
   })
-  semester: number;
+  semester: string;
 
   @ApiProperty({
     description: 'Year',
     nullable: true,
-    example: '1',
-    type: 'integer',
+    example: '1, 2',
+    type: 'string',
   })
   @Column({
-    type: DataType.TINYINT,
+    type: DataType.STRING(100),
     allowNull: true,
   })
-  year: number;
+  year: string;
 
   @ApiProperty({
     description: 'Catalogue type',

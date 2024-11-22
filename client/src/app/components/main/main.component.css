@@ -1,10 +1,9 @@
 .container {
-  height: 90vh;
-  width: 99vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
 }
 
 .sub-container {
@@ -48,7 +47,7 @@
   }
 
   .image {
-    width: 60%;
+    width: 50%;
     max-width: 200px;
   }
 }

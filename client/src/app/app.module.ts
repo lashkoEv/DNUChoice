@@ -27,6 +27,7 @@ import { DialogModule } from 'primeng/dialog';
 import { GroupComponent } from './components/group/group.component';
 import { ListboxModule } from 'primeng/listbox';
 import { StudentComponent } from './components/student/student.component';
+import { DisciplineComponent } from './components/discipline/discipline.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { StudentComponent } from './components/student/student.component';
     TeacherComponent,
     GroupComponent,
     StudentComponent,
+    DisciplineComponent,
   ],
   imports: [
     BrowserModule,
