@@ -72,7 +72,7 @@ export class GroupController {
     const count = await this.groupService.count(scopes);
 
     if (count) {
-      scopes.push('withUsers');
+      scopes.push('withUsers', 'withDisciplinesCount');
 
       groups = await this.groupService.findAll(scopes);
     }

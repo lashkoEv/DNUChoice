@@ -51,7 +51,7 @@ export class HeaderComponent implements OnInit {
           },
           {
             label: 'Дисципліни',
-            icon: 'pi pi-file',
+            icon: 'pi pi-book',
             routerLink: ['/disciplines'],
           },
         );
@@ -85,7 +85,7 @@ export class HeaderComponent implements OnInit {
             routerLink: ['/profile'],
           },
           {
-            label: 'Обрати дисципліну',
+            label: 'Обрати дисципліни',
             icon: 'pi pi-plus-circle',
             routerLink: ['/#'],
           },

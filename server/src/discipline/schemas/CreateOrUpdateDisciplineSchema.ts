@@ -60,7 +60,6 @@ export class CreateOrUpdateDisciplineSchema {
     example: 1,
     type: 'integer',
   })
-  @IsInt()
   @Type(() => Number)
   @IsInt()
   @IsPositive()

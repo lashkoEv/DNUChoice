@@ -36,8 +36,8 @@
       [paginator]="true"
       [rows]="5"
       [sortMode]="'multiple'"
-      [rowsPerPageOptions]="[5, 10, 20]"
       responsiveLayout="scroll"
+      [rowsPerPageOptions]="[5, 10, 20]"
     >
       <ng-template pTemplate="header">
         <tr>
@@ -50,9 +50,10 @@
           <th pSortableColumn="year">Курс
             <p-sortIcon field="year"></p-sortIcon>
           </th>
-          <th></th>
-          <th></th>
-          <th></th>
+          <th *ngIf="getRole() === UserRoles.admin" style="width: 14.5rem; min-width: 14.5rem"></th>
+          <th style="width: 5rem"></th>
+          <th style="width: 5rem"></th>
+          <th style="width: 5rem"></th>
         </tr>
       </ng-template>
 
@@ -61,6 +62,15 @@
           <td>{{ group.id }}</td>
           <td>{{ group.title }}</td>
           <td>{{ group.year }}</td>
+          <td *ngIf="getRole() === UserRoles.admin">
+            <button
+              pButton
+              icon="pi pi-book"
+              label="Вибір дисциплін"
+              class="p-button p-button-outlined"
+              (click)="viewGroupDisciplinesCountsDetails(group)"
+            ></button>
+          </td>
           <td>
             <button
               pButton
@@ -95,6 +105,286 @@
       </ng-template>
     </p-table>
   </div>
+
+  <p-dialog
+    [(visible)]="displayGroupDisciplinesCountsDialog"
+    [header]="'Кількість дисциплін для вибору'"
+    [closable]="true"
+    [dismissableMask]="true"
+    [style]="{width: '1000px'}"
+    [modal]="true"
+    [baseZIndex]="10000">
+
+    <ng-template pTemplate="content">
+      <div *ngIf="selectedGroup">
+        <div class="container-header mb-3">
+          <div class="search-container">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                placeholder="Пошук"
+                (input)="applyFilterDisciplines($event)"
+              />
+            </span>
+          </div>
+
+          <div class="button-container">
+            <button
+              pButton
+              label="Додати вибір"
+              icon="pi pi-plus"
+              class="p-button-success"
+              (click)="openAddDisciplineDialog()"></button>
+          </div>
+        </div>
+        <div *ngIf="disciplinesCounts.length">
+          <p-table
+            [value]="filteredDisciplines"
+            [paginator]="true"
+            [rows]="5"
+            [sortMode]="'multiple'"
+            responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+              <tr>
+                <th pSortableColumn="toYear">Курс
+                  <p-sortIcon field="toYear"></p-sortIcon>
+                </th>
+                <th pSortableColumn="toSemester">Семестр
+                  <p-sortIcon field="toSemester"></p-sortIcon>
+                </th>
+                <th pSortableColumn="disciplinesCount">Кількість дисциплін
+                  <p-sortIcon field="disciplinesCount"></p-sortIcon>
+                </th>
+                <th style="width: 5rem"></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-discipline>
+              <tr>
+                <td>{{ discipline.toYear }}</td>
+                <td>{{ discipline.toSemester }}</td>
+                <td>{{ discipline.disciplinesCount }}</td>
+                <td>
+                  <button
+                    pButton
+                    icon="pi pi-pencil"
+                    class="p-button-warning"
+                    (click)="editDiscipline(discipline)"
+                  ></button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6">Дані не знайдені...</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <div *ngIf="!disciplinesCounts.length">
+          <p><strong>Група ще не містить інформації про вибір дисциплін!</strong></p>
+        </div>
+      </div>
+      <div *ngIf="!selectedGroup">
+        <p>Інформація відсутня.</p>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog
+    [(visible)]="displayAddDisciplineDialog"
+    [header]="'Додати нову інформацію про вибір'"
+    [closable]="true"
+    [modal]="true"
+    [style]="{width: '600px'}"
+    [baseZIndex]="10001">
+
+    <ng-template pTemplate="content">
+      <form [formGroup]="addDisciplineForm">
+        <div class="p-fluid form-container">
+          <div class="p-field fullSize">
+            <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi pi-hashtag"></i>
+            </span>
+
+              <input
+                id="disciplinesCount"
+                type="text"
+                pInputText
+                formControlName="disciplinesCount"
+                placeholder="Кількість дисциплін"
+                [min]="1"
+              />
+            </p-inputGroup>
+            <small
+              *ngIf="addDisciplineForm.get('disciplinesCount')?.invalid && addDisciplineForm.get('disciplinesCount')?.touched"
+              class="p-error">
+              Введіть коректне значення кількості дисциплін!
+            </small>
+          </div>
+
+          <div class="p-field fullSize">
+            <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-calendar"></i>
+            </span>
+              <input
+                id="toSemester"
+                type="number"
+                pInputText
+                formControlName="toSemester"
+                placeholder="Семестр"
+                [min]="1"
+                [max]="2"
+              />
+            </p-inputGroup>
+            <small
+              *ngIf="addDisciplineForm.get('toSemester')?.hasError('positiveNumber') && addDisciplineForm.get('toSemester')?.touched"
+              class="p-error">
+              Введіть коректний семестр! Семестр повинен бути 1 чи 2.
+            </small>
+            <small
+              *ngIf="addDisciplineForm.get('toSemester')?.hasError('required') && addDisciplineForm.get('toSemester')?.touched"
+              class="p-error">
+              Семестр обов'язковий!
+            </small>
+          </div>
+
+          <div class="p-field fullSize">
+            <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-graduation-cap"></i>
+            </span>
+              <input
+                id="toYear"
+                type="number"
+                pInputText
+                formControlName="toYear"
+                placeholder="Курс"
+                [min]="1"
+              />
+            </p-inputGroup>
+            <small
+              *ngIf="addDisciplineForm.get('toYear')?.hasError('positiveNumber') && addDisciplineForm.get('toYear')?.touched"
+              class="p-error">
+              Введіть коректний курс! Курс повинен бути більше 0.
+            </small>
+            <small
+              *ngIf="addDisciplineForm.get('toYear')?.hasError('required') && addDisciplineForm.get('toYear')?.touched"
+              class="p-error">
+              Курс обов'язковий!
+            </small>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <button pButton label="Зберегти" icon="pi pi-check" (click)="saveDiscipline()"
+              [disabled]="addDisciplineForm.invalid"></button>
+      <button pButton label="Скасувати" icon="pi pi-times" (click)="closeAddDisciplineDialog()"
+              class="p-button-text"></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog
+    [(visible)]="displayEditDisciplineDialog"
+    [header]="'Редагувати інформацію про вибір'"
+    [closable]="true"
+    [modal]="true"
+    [style]="{width: '600px'}"
+    [baseZIndex]="10001">
+
+    <ng-template pTemplate="content">
+      <form [formGroup]="editDisciplineForm">
+        <div class="p-fluid form-container">
+          <div class="p-field fullSize">
+            <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi pi-hashtag"></i>
+            </span>
+
+              <input
+                id="disciplinesCountUpdate"
+                type="text"
+                pInputText
+                formControlName="disciplinesCountUpdate"
+                placeholder="Кількість дисциплін"
+                [min]="1"
+              />
+            </p-inputGroup>
+            <small
+              *ngIf="editDisciplineForm.get('disciplinesCountUpdate')?.invalid && editDisciplineForm.get('disciplinesCountUpdate')?.touched"
+              class="p-error">
+              Введіть коректне значення кількості дисциплін!
+            </small>
+          </div>
+
+          <div class="p-field fullSize">
+            <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-calendar"></i>
+            </span>
+              <input
+                id="toSemesterUpdate"
+                type="number"
+                pInputText
+                formControlName="toSemesterUpdate"
+                placeholder="Семестр"
+                [min]="1"
+                [max]="2"
+              />
+            </p-inputGroup>
+            <small
+              *ngIf="editDisciplineForm.get('toSemesterUpdate')?.hasError('positiveNumber') && editDisciplineForm.get('toSemesterUpdate')?.touched"
+              class="p-error">
+              Введіть коректний семестр! Семестр повинен бути 1 чи 2.
+            </small>
+            <small
+              *ngIf="editDisciplineForm.get('toSemesterUpdate')?.hasError('required') && editDisciplineForm.get('toSemesterUpdate')?.touched"
+              class="p-error">
+              Семестр обов'язковий!
+            </small>
+          </div>
+
+          <div class="p-field fullSize">
+            <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-graduation-cap"></i>
+            </span>
+              <input
+                id="toYearUpdate"
+                type="number"
+                pInputText
+                formControlName="toYearUpdate"
+                placeholder="Курс"
+                [min]="1"
+              />
+            </p-inputGroup>
+            <small
+              *ngIf="editDisciplineForm.get('toYearUpdate')?.hasError('positiveNumber') && editDisciplineForm.get('toYearUpdate')?.touched"
+              class="p-error">
+              Введіть коректний курс! Курс повинен бути більше 0.
+            </small>
+            <small
+              *ngIf="editDisciplineForm.get('toYearUpdate')?.hasError('required') && editDisciplineForm.get('toYearUpdate')?.touched"
+              class="p-error">
+              Курс обов'язковий!
+            </small>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <button pButton label="Зберегти" icon="pi pi-check" (click)="saveEditedDiscipline()"
+              [disabled]="editDisciplineForm.invalid"></button>
+      <button pButton label="Скасувати" icon="pi pi-times" (click)="closeEditDisciplineDialog()"
+              class="p-button-text"></button>
+    </ng-template>
+  </p-dialog>
 
   <p-dialog
     [(visible)]="displayGroupDialog"

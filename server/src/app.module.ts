@@ -13,6 +13,8 @@ import { DisciplineModule } from './discipline/discipline.module';
 import { Discipline } from './discipline/discipline.model';
 import { StudentDiscipline } from './student-discipline/student-discipline.model';
 import { StudentDisciplineModule } from './student-discipline/student-discipline.module';
+import { DisciplinesCountModule } from './disciplines-count/disciplines-count.module';
+import { DisciplinesCount } from './disciplines-count/disciplines-count.model';
 
 @Module({
   imports: [
@@ -27,7 +29,7 @@ import { StudentDisciplineModule } from './student-discipline/student-discipline
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      models: [User, Group, Discipline, StudentDiscipline],
+      models: [User, Group, Discipline, StudentDiscipline, DisciplinesCount],
     }),
     UserModule,
     RedisCacheModule,
@@ -35,6 +37,7 @@ import { StudentDisciplineModule } from './student-discipline/student-discipline
     GroupModule,
     DisciplineModule,
     StudentDisciplineModule,
+    DisciplinesCountModule,
   ],
   controllers: [AppController],
   providers: [AppService],

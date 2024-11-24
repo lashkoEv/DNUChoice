@@ -6,5 +6,12 @@
 
 .logo {
   height: 40px;
-  margin-right: 1rem;
+  margin-right: 0.5rem;
+  margin-left: 0.3rem;
+}
+
+.container {
+  padding: 1rem 2rem;
+  background: linear-gradient(45deg, #004193 0%, #0171c1 100%);
+  /*background: linear-gradient(90deg, var(--primary-color) 0%, #55adff 100%);*/
 }

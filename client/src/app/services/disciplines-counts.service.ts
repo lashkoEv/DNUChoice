@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { catchError, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { UserService } from './user.service';
+import { catchError, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DisciplineService {
+export class DisciplinesCountsService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
@@ -15,22 +15,7 @@ export class DisciplineService {
   ) {
   }
 
-  private apiUrl = 'http://localhost:3000/api/disciplines';
-
-  getAll(): Observable<any[]> {
-    const headers = this.userService.getHeaders();
-
-    return this.http.get<any[]>(`${this.apiUrl}`, { headers }).pipe(
-      catchError((err) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Помилка отримання даних!',
-          detail: 'Не вдалося отримати список дисциплін...',
-        });
-        throw err;
-      }),
-    );
-  }
+  private apiUrl = 'http://localhost:3000/api/disciplinesCounts';
 
   create(data: Object) {
     const headers = this.userService.getHeaders();
@@ -39,23 +24,8 @@ export class DisciplineService {
       catchError((err) => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Помилка створення дисципліни!',
+          summary: 'Помилка створення даних про вибір для групи!',
           detail: 'Перевірте введені дані! Або могла статись помилка на сервері...',
-        });
-        throw err;
-      }),
-    );
-  }
-
-  delete(disciplineId: number): Observable<void> {
-    const headers = this.userService.getHeaders();
-
-    return this.http.delete<void>(`${this.apiUrl}/${disciplineId}`, { headers }).pipe(
-      catchError((err) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Помилка видалення!',
-          detail: 'Не вдалося видалити дисципліну.',
         });
         throw err;
       }),
@@ -69,7 +39,7 @@ export class DisciplineService {
       catchError((err) => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Помилка редагування дисципліни!',
+          summary: 'Помилка редагування даних про вибір для групи!',
           detail: 'Перевірте введені дані! Або могла статись помилка на сервері...',
         });
         throw err;

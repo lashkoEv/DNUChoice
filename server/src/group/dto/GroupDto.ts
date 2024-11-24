@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Group } from '../group.model';
 import { UserDto } from '../../user/dto/UserDto';
 import { User } from '../../user/user.model';
+import { DisciplinesCountDto } from '../../disciplines-count/dto/DisciplinesCountDto';
 
 export class GroupDto {
   @ApiProperty({
@@ -50,6 +51,12 @@ export class GroupDto {
   })
   users: UserDto[];
 
+  @ApiProperty({
+    type: [DisciplinesCountDto],
+    description: 'List of disciplines counts',
+  })
+  disciplinesCounts: DisciplinesCountDto[];
+
   constructor(group: Group) {
     this.id = group.id;
     this.title = group.title;
@@ -57,5 +64,8 @@ export class GroupDto {
     this.createdAt = group.createdAt;
     this.updatedAt = group.updatedAt;
     this.users = group.users?.map((user: User) => new UserDto(user)) || [];
+    this.disciplinesCounts =
+      group.disciplinesCount?.map((item) => new DisciplinesCountDto(item)) ||
+      [];
   }
 }

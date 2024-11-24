@@ -5,6 +5,7 @@ import { GroupService } from '../../services/group.service';
 import { Observable, of } from 'rxjs';
 import { UserService } from '../../services/user.service';
 import { UserRoles } from '../../enums/userRoles';
+import { DisciplinesCountsService } from '../../services/disciplines-counts.service';
 
 @Component({
   selector: 'app-group',
@@ -15,19 +16,29 @@ export class GroupComponent implements OnInit {
   groups: any[] = [];
   filteredGroups: any[] = [];
   selectedGroup: any = null;
+  selectedDiscipline: any = null;
   users: any = null;
+  disciplinesCounts: any = null;
+  filteredDisciplines: any[] = [];
+  displayGroupDisciplinesCountsDialog: boolean = false;
   displayGroupDialog: boolean = false;
   loading: boolean = true;
   displayAddGroupDialog: boolean = false;
   addGroupForm: FormGroup;
   displayEditGroupDialog: boolean = false;
   editGroupForm: FormGroup;
+  displayAddDisciplineDialog: boolean = false;
+  addDisciplineForm: FormGroup;
+  displayEditDisciplineDialog: boolean = false;
+  editDisciplineForm: FormGroup;
+  protected readonly UserRoles = UserRoles;
 
   constructor(
     private groupService: GroupService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private userService: UserService,
+    private disciplinesCountsService: DisciplinesCountsService,
     private fb: FormBuilder,
   ) {
     this.addGroupForm = this.fb.group({
@@ -39,7 +50,25 @@ export class GroupComponent implements OnInit {
       titleUpdate: ['', Validators.required],
       yearUpdate: ['', Validators.required, this.positiveNumberValidator],
     });
+
+    this.addDisciplineForm = this.fb.group({
+      disciplinesCount: ['', Validators.required, this.positiveNumberValidator],
+      toSemester: ['', Validators.required, this.positiveNumberValidator],
+      toYear: ['', Validators.required, this.positiveNumberValidator],
+    });
+
+    this.editDisciplineForm = this.fb.group({
+      disciplinesCountUpdate: ['', Validators.required, this.positiveNumberValidator],
+      toSemesterUpdate: ['', Validators.required, this.positiveNumberValidator],
+      toYearUpdate: ['', Validators.required, this.positiveNumberValidator],
+    });
   }
+
+  getRole() {
+    return this.userService.getUserRole();
+  }
+
+  // ------------------ Групи ------------------
 
   positiveNumberValidator(control: AbstractControl): Observable<{ [key: string]: boolean } | null> {
     if (control.value !== null && control.value <= 0) {
@@ -250,9 +279,101 @@ export class GroupComponent implements OnInit {
     }
   }
 
-  getRole() {
-    return this.userService.getUserRole();
+  // ------------------ Вибір дисциплін ------------------
+
+  viewGroupDisciplinesCountsDetails(group: any) {
+    this.selectedGroup = group;
+    this.disciplinesCounts = group.disciplinesCounts;
+    this.filteredDisciplines = [...this.disciplinesCounts];
+    this.displayGroupDisciplinesCountsDialog = true;
   }
 
-  protected readonly UserRoles = UserRoles;
+  closeViewDisciplinesDialog() {
+    this.displayGroupDisciplinesCountsDialog = false;
+  }
+
+  applyFilterDisciplines(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const query = inputElement.value.toLowerCase();
+
+    this.filteredDisciplines = this.disciplinesCounts.filter(
+      (item: any) =>
+        String(item.disciplinesCount).toLowerCase().includes(query) ||
+        String(item.toSemester).toLowerCase().includes(query) ||
+        String(item.toYear).toLowerCase().includes(query),
+    );
+  }
+
+  openAddDisciplineDialog() {
+    this.displayAddDisciplineDialog = true;
+  }
+
+  closeAddDisciplineDialog() {
+    this.displayAddDisciplineDialog = false;
+    this.addDisciplineForm.reset();
+  }
+
+  saveDiscipline() {
+    if (this.addDisciplineForm.valid) {
+      const newDiscipline = this.addDisciplineForm.value;
+
+      Object.assign(newDiscipline, { groupId: this.selectedGroup.id });
+
+      this.disciplinesCountsService.create(newDiscipline).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Успіх!',
+            detail: 'Інформацію про вибір для групи успішно додано!',
+          });
+          this.fetchGroups();
+          this.closeAddDisciplineDialog();
+          this.closeViewDisciplinesDialog();
+        },
+        error: () => {
+        },
+      });
+    }
+  }
+
+  editDiscipline(discipline: any) {
+    this.selectedDiscipline = discipline;
+    this.displayEditDisciplineDialog = true;
+    this.editDisciplineForm.patchValue({
+      disciplinesCountUpdate: discipline.disciplinesCount,
+      toSemesterUpdate: discipline.toSemester,
+      toYearUpdate: discipline.toYear,
+    });
+  }
+
+  closeEditDisciplineDialog() {
+    this.displayEditDisciplineDialog = false;
+    this.editDisciplineForm.reset();
+  }
+
+  saveEditedDiscipline() {
+    if (this.editDisciplineForm.valid) {
+      const updatedDiscipline = {
+        disciplinesCount: this.editDisciplineForm.value.disciplinesCountUpdate,
+        toSemester: this.editDisciplineForm.value.toSemesterUpdate,
+        toYear: this.editDisciplineForm.value.toYearUpdate,
+        groupId: this.selectedGroup.id
+      };
+
+      this.disciplinesCountsService.update(this.selectedDiscipline.id, updatedDiscipline).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Успіх!',
+            detail: 'Дані про вибір для групи успішно оновлено!',
+          });
+          this.fetchGroups();
+          this.closeEditDisciplineDialog();
+          this.closeViewDisciplinesDialog();
+        },
+        error: () => {
+        },
+      });
+    }
+  }
 }

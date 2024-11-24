@@ -1,4 +1,28 @@
-<div class="container">
+<div *ngIf="getRole() === UserRoles.admin" class="main-container">
+  <div class="ripple-container">
+    <div pRipple class="box" (click)="redirect('/teachers')">Адміністратори і викладачі</div>
+    <div pRipple class="box" (click)="redirect('/students')">Студенти</div>
+    <div pRipple class="box" (click)="redirect('/groups')">Групи</div>
+    <div pRipple class="box" (click)="redirect('/disciplines')">Дисципліни</div>
+  </div>
+</div>
+
+<div *ngIf="getRole() === UserRoles.teacher" class="main-container">
+  <div class="ripple-container">
+    <div pRipple class="box" (click)="redirect('/students')">Студенти</div>
+    <div pRipple class="box" (click)="redirect('/groups')">Групи</div>
+    <div pRipple class="box" (click)="redirect('/disciplines')">Дисципліни</div>
+  </div>
+</div>
+
+<div *ngIf="getRole() === UserRoles.student" class="main-container">
+  <div class="ripple-container">
+    <div pRipple class="box" (click)="redirect('/profile')">Мій профіль</div>
+    <div pRipple class="box" (click)="redirect('/add-disciplines')">Обрати дисципліни</div>
+  </div>
+</div>
+
+<div *ngIf="!getRole()" class="container">
   <div class="sub-container">
     <img src="/logo.png" alt="Logo" class="image" />
 

@@ -52,7 +52,7 @@ export class GroupService {
         this.messageService.add({
           severity: 'error',
           summary: 'Помилка створення групи!',
-          detail: 'Могла статись помилка на серврі...',
+          detail: 'Перевірте введені дані! Або могла статись помилка на сервері...',
         });
         throw err;
       }),
@@ -95,7 +95,7 @@ export class GroupService {
         this.messageService.add({
           severity: 'error',
           summary: 'Помилка редагування групи!',
-          detail: 'Могла статись помилка на серврі...',
+          detail: 'Перевірте введені дані! Або могла статись помилка на сервері...',
         });
         throw err;
       }),

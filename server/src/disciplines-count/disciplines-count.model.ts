@@ -1,52 +1,26 @@
 import {
   AllowNull,
   AutoIncrement,
+  BelongsTo,
   Column,
   CreatedAt,
   DataType,
-  HasMany,
+  ForeignKey,
   Model,
   PrimaryKey,
-  Scopes,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../user/user.model';
-import { DisciplinesCount } from '../disciplines-count/disciplines-count.model';
+import { Group } from '../group/group.model';
 
-@Scopes(() => ({
-  byId: (id: number) => ({
-    where: { id },
-  }),
-  byPage: (limit: number = null, offset: number = 0) => ({
-    limit,
-    offset,
-  }),
-  withUsers: () => ({
-    include: [
-      {
-        model: User,
-      },
-    ],
-    subQuery: false,
-  }),
-  withDisciplinesCount: () => ({
-    include: [
-      {
-        model: DisciplinesCount,
-      },
-    ],
-    subQuery: false,
-  }),
-}))
 @Table({
-  tableName: 'academicGroups',
+  tableName: 'disciplinesCount',
   timestamps: true,
 })
-export class Group extends Model {
+export class DisciplinesCount extends Model {
   @ApiProperty({
-    description: 'Group identifier',
+    description: 'Identifier',
     nullable: false,
     example: 1,
     type: 'integer',
@@ -57,30 +31,45 @@ export class Group extends Model {
   id: number;
 
   @ApiProperty({
-    description: 'Title',
+    description: 'Disciplines count',
     nullable: false,
-    example: 'PZ-23m-2',
-    type: 'string',
+    example: 1,
+    type: 'integer',
   })
   @AllowNull(false)
-  @Column(DataType.STRING(255))
-  title: string;
+  @Column(DataType.INTEGER)
+  disciplinesCount: number;
 
   @ApiProperty({
-    description: 'Year',
+    description: 'To semester',
     nullable: false,
-    example: '1',
+    example: 1,
     type: 'integer',
   })
   @AllowNull(false)
   @Column(DataType.TINYINT)
-  year: number;
+  toSemester: number;
 
-  @HasMany(() => User)
-  users: User[];
+  @ApiProperty({
+    description: 'To year',
+    nullable: false,
+    example: 1,
+    type: 'integer',
+  })
+  @AllowNull(false)
+  @Column(DataType.TINYINT)
+  toYear: number;
 
-  @HasMany(() => DisciplinesCount)
-  disciplinesCount: DisciplinesCount[];
+  @ApiProperty({
+    description: 'Group identifier',
+    nullable: false,
+    example: 1,
+    type: 'integer',
+  })
+  @AllowNull(false)
+  @Column(DataType.INTEGER)
+  @ForeignKey(() => Group)
+  groupId: number;
 
   @ApiProperty({
     description: 'Created at',
@@ -103,4 +92,7 @@ export class Group extends Model {
   @AllowNull(false)
   @Column({ type: DataType.DATE })
   updatedAt: Date;
+
+  @BelongsTo(() => Group)
+  group: Group;
 }

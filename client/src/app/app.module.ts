@@ -28,6 +28,7 @@ import { GroupComponent } from './components/group/group.component';
 import { ListboxModule } from 'primeng/listbox';
 import { StudentComponent } from './components/student/student.component';
 import { DisciplineComponent } from './components/discipline/discipline.component';
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { DisciplineComponent } from './components/discipline/discipline.componen
     DialogModule,
     ReactiveFormsModule,
     ListboxModule,
+    RippleModule
   ],
   providers: [MessageService, ConfirmationService, HttpClient],
   bootstrap: [AppComponent],

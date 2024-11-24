@@ -92,7 +92,10 @@ export class UserController {
   async getAuthorizedUser(@Request() req: ExpressRequest) {
     const payload = req.user as IJwtPayload;
 
-    const user = await this.userService.findById(payload.id, ['withGroup']);
+    const user = await this.userService.findById(payload.id, [
+      'withGroup',
+      'withDisciplines',
+    ]);
 
     const data = {
       token: payload.token,
