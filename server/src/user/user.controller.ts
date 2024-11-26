@@ -93,7 +93,7 @@ export class UserController {
     const payload = req.user as IJwtPayload;
 
     const user = await this.userService.findById(payload.id, [
-      'withGroup',
+      'withGroupWithDisciplinesCount',
       'withDisciplines',
     ]);
 

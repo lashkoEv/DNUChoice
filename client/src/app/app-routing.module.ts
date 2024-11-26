@@ -8,6 +8,7 @@ import { TeacherComponent } from './components/teacher/teacher.component';
 import { GroupComponent } from './components/group/group.component';
 import { StudentComponent } from './components/student/student.component';
 import { DisciplineComponent } from './components/discipline/discipline.component';
+import { StudentChoiceComponent } from './components/student-choice/student-choice.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
@@ -17,6 +18,8 @@ const routes: Routes = [
   { path: 'groups', component: GroupComponent },
   { path: 'students', component: StudentComponent },
   { path: 'disciplines', component: DisciplineComponent },
+  { path: 'add-disciplines', component: StudentChoiceComponent },
+  { path: 'profile', component: StudentChoiceComponent },
   { path: '**', component: ErrorComponent },
 ];
 

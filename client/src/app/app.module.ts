@@ -29,6 +29,8 @@ import { ListboxModule } from 'primeng/listbox';
 import { StudentComponent } from './components/student/student.component';
 import { DisciplineComponent } from './components/discipline/discipline.component';
 import { RippleModule } from 'primeng/ripple';
+import { StudentChoiceComponent } from './components/student-choice/student-choice.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import { RippleModule } from 'primeng/ripple';
     GroupComponent,
     StudentComponent,
     DisciplineComponent,
+    StudentChoiceComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

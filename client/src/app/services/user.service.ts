@@ -117,6 +117,27 @@ export class UserService {
     );
   }
 
+  getMe(): Observable<void> {
+    const user = this.userSubject.getValue();
+    const token = user?.session.token;
+
+    const headers = token
+      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
+      : new HttpHeaders();
+
+    return this.http.get<any>(`${this.apiUrl}/me`, { headers }).pipe(
+      catchError((err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Помилка отримання даних!',
+          detail: 'Не вдалося отримати дані про користувача.',
+        });
+        this.logout();
+        throw err;
+      }),
+    );
+  }
+
   updateUser(userId: number, data: any) {
     const user = this.userSubject.getValue();
     const token = user?.session.token;

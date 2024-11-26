@@ -19,6 +19,7 @@ import {
 import { Group } from '../group/group.model';
 import { Discipline } from '../discipline/discipline.model';
 import { StudentDiscipline } from '../student-discipline/student-discipline.model';
+import { DisciplinesCount } from '../disciplines-count/disciplines-count.model';
 
 @Scopes(() => ({
   byId: (id: number) => ({
@@ -51,6 +52,21 @@ import { StudentDiscipline } from '../student-discipline/student-discipline.mode
       {
         model: Group,
         subQuery: false,
+      },
+    ],
+    subQuery: false,
+  }),
+  withGroupWithDisciplinesCount: () => ({
+    include: [
+      {
+        model: Group,
+        subQuery: false,
+        include: [
+          {
+            model: DisciplinesCount,
+            subQuery: false,
+          },
+        ],
       },
     ],
     subQuery: false,
