@@ -227,6 +227,34 @@
 
           <div class="p-field fullSize">
             <p-dropdown
+              id="catalogueType"
+              [options]="catalogueTypes"
+              formControlName="catalogueType"
+              placeholder="Оберіть тип каталогу">
+            </p-dropdown>
+            <small
+              *ngIf="addDisciplineForm.get('catalogueType')?.invalid && addDisciplineForm.get('catalogueType')?.touched"
+              class="p-error">
+              Виберіть тип каталогу!
+            </small>
+          </div>
+
+          <div class="p-field fullSize">
+            <p-dropdown
+              id="educationalLevel"
+              [options]="educationalLevels"
+              formControlName="educationalLevel"
+              placeholder="Оберіть освітній рівень">
+            </p-dropdown>
+            <small
+              *ngIf="addDisciplineForm.get('educationalLevel')?.invalid && addDisciplineForm.get('educationalLevel')?.touched"
+              class="p-error">
+              Виберіть освітній рівень!
+            </small>
+          </div>
+
+          <div class="p-field fullSize">
+            <p-dropdown
               id="semester"
               [options]="semesterOptions"
               formControlName="semester"
@@ -254,34 +282,6 @@
             <small *ngIf="addDisciplineForm.get('year')?.invalid && addDisciplineForm.get('year')?.touched"
                    class="p-error">
               Курс має містити лише позитивні числа, розділені комами!
-            </small>
-          </div>
-
-          <div class="p-field fullSize">
-            <p-dropdown
-              id="catalogueType"
-              [options]="catalogueTypes"
-              formControlName="catalogueType"
-              placeholder="Оберіть тип каталогу">
-            </p-dropdown>
-            <small
-              *ngIf="addDisciplineForm.get('catalogueType')?.invalid && addDisciplineForm.get('catalogueType')?.touched"
-              class="p-error">
-              Виберіть тип каталогу!
-            </small>
-          </div>
-
-          <div class="p-field fullSize">
-            <p-dropdown
-              id="educationalLevel"
-              [options]="educationalLevels"
-              formControlName="educationalLevel"
-              placeholder="Оберіть освітній рівень">
-            </p-dropdown>
-            <small
-              *ngIf="addDisciplineForm.get('educationalLevel')?.invalid && addDisciplineForm.get('educationalLevel')?.touched"
-              class="p-error">
-              Виберіть освітній рівень!
             </small>
           </div>
 

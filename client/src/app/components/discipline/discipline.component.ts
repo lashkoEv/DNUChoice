@@ -87,7 +87,7 @@ export class DisciplineComponent implements OnInit {
   urlValidator(control: AbstractControl) {
     const value = control.value;
     if (!value || value === '') return null;
-    const urlPattern = /^https:\/\/.*/;
+    const urlPattern = /^http(?:s)?:\/\/.*/;
     return urlPattern.test(value) ? null : { invalidUrl: true };
   }
 

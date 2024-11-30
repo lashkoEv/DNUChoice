@@ -1,1 +1,177 @@
-<p>student-choice works!</p>
+<div class="container" *ngIf="getRole() === UserRoles.student">
+  <p-tabView [(activeIndex)]="activeIndex">
+    <p-tabPanel [disabled]="firstTabDisabled" header="Крок 1: Оберіть семестр і курс">
+      <ng-template pTemplate="content">
+        <div class="sub-container">
+          <div class="title">Оберіть семестр і курс, для якого хочете зробити вибір</div>
+
+          <form class="fullSize" [formGroup]="form">
+            <div class="p-fluid form-container">
+              <div class="p-field fullSize">
+                <p-dropdown
+                  id="semester"
+                  [options]="semesters"
+                  optionLabel="label"
+                  formControlName="semester"
+                  placeholder="Оберіть семестр">
+                </p-dropdown>
+                <small
+                  *ngIf="form.get('semester')?.hasError('positiveNumber') && form.get('semester')?.touched"
+                  class="p-error">
+                  Введіть коректний семестр! Семестр повинен бути 1 чи 2.
+                </small>
+                <small
+                  *ngIf="form.get('semester')?.hasError('required') && form.get('semester')?.touched"
+                  class="p-error">
+                  Семестр обов'язковий!
+                </small>
+              </div>
+
+              <div class="p-field fullSize">
+                <p-inputGroup>
+                <span class="p-inputgroup-addon">
+                  <i class="pi pi-graduation-cap"></i>
+                </span>
+                  <input
+                    id="year"
+                    type="number"
+                    pInputText
+                    formControlName="year"
+                    placeholder="Курс"
+                    [min]="1"
+                  />
+                </p-inputGroup>
+                <small
+                  *ngIf="form.get('year')?.hasError('positiveNumber') && form.get('year')?.touched"
+                  class="p-error">
+                  Введіть коректний курс! Курс повинен бути більше 0.
+                </small>
+                <small
+                  *ngIf="form.get('year')?.hasError('required') && form.get('year')?.touched"
+                  class="p-error">
+                  Курс обов'язковий!
+                </small>
+              </div>
+            </div>
+          </form>
+
+          <p-button
+            label='Перейти до наступного кроку'
+            icon="pi pi-arrow-right"
+            iconPos="right"
+            [disabled]="form.invalid"
+            (onClick)="loadDisciplines()"/>
+        </div>
+      </ng-template>
+    </p-tabPanel>
+    <p-tabPanel [disabled]="secondTabDisabled" header="Крок 2: Оберіть дисципліни">
+      <ng-template pTemplate="content">
+        <div *ngIf="!disciplinesCount">
+          <div class="sub-container">
+            <div class="title">Для даного семестру і курсу не визначено кількість дисциплін для вибору!</div>
+
+            <p-button
+              label="Назад"
+              icon="pi pi-arrow-left"
+              (onClick)="setTab(0)"
+            ></p-button>
+          </div>
+        </div>
+
+        <div *ngIf="disciplinesCount">
+          <div class="sub-container">
+            <div class="title">Оберіть дисципліни</div>
+
+            <div class="subtitle">Кількість дисциплін для вибору: <span>{{ disciplinesCount }}</span></div>
+
+            <p-pickList
+              class="fullSize"
+              [source]="disciplines"
+              [target]="selectedDisciplines"
+              sourceHeader="Доступні дисципліни"
+              targetHeader="Обрані дисципліни"
+              [dragdrop]="true"
+              [responsive]="true"
+              [sourceStyle]="{ height: '400px' }"
+              [targetStyle]="{ height: '400px' }"
+              filterBy="title"
+              sourceFilterPlaceholder="Пошук по назві дисципліни..."
+              targetFilterPlaceholder="Пошук по назві дисципліни...">
+              <ng-template let-discipline pTemplate="item">
+                <div class="card">
+                  <div class="card-title">
+                    <strong>{{ discipline.code }}</strong>
+                    {{ discipline.title }}
+                  </div>
+                  <div class="tags">
+                    <p-tag value="{{getCatalogueType(discipline)}}" [rounded]="true"/>
+                    <p-tag severity="success" value="{{getEducationalLevel(discipline)}}" [rounded]="true"/>
+                  </div>
+                </div>
+              </ng-template>
+            </p-pickList>
+
+            <div class="buttons">
+              <p-button
+                label="Назад"
+                icon="pi pi-arrow-left"
+                (onClick)="setTab(0)"
+              ></p-button>
+
+              <p-button
+                label="Далі"
+                icon="pi pi-arrow-right"
+                (onClick)="choseDisciplines()"
+              ></p-button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-tabPanel>
+    <p-tabPanel [disabled]="thirdTabDisabled" header="Крок 3: Завершіть вибір">
+      <ng-template pTemplate="content">
+        <div>
+          <div *ngFor="let discipline of selectedDisciplines">
+            <div class="card-confirm">
+              <div class="card-title">
+                <strong>{{ discipline.code }}</strong>
+                {{ discipline.title }}
+                <p-tag [style]="{marginLeft: '0.2rem'}" value="{{getCatalogueType(discipline)}}" [rounded]="true"/>
+                <p-tag [style]="{marginLeft: '0.5rem'}" severity="success" value="{{getEducationalLevel(discipline)}}" [rounded]="true"/>
+              </div>
+
+              <a *ngIf="discipline.link" href="{{discipline.link}}" class="p-button" target="_blank">
+                Докладніше про дисципліну
+                <i [style]="{marginLeft: '0.4rem'}"  class="pi pi-info-circle"></i>
+              </a>
+            </div>
+            <p-divider/>
+          </div>
+
+          <div class="buttons">
+            <p-button
+              label="Назад"
+              icon="pi pi-arrow-left"
+              (onClick)="setTab(1)"
+            ></p-button>
+
+            <p-button
+              label="Завершити"
+              severity="success"
+              icon="pi pi-check"
+              (onClick)="confirm()"
+            ></p-button>
+          </div>
+        </div>
+      </ng-template>
+    </p-tabPanel>
+  </p-tabView>
+</div>
+
+<div *ngIf="getRole() !== UserRoles.student" class="ban">
+  <i class="pi pi-lock ban-icon"></i>
+
+  <div class="ban-text">
+    У вас немає доступу до цієї сторінки!
+  </div>
+</div>

@@ -1,0 +1,92 @@
+.container {
+  padding: 1rem 2rem;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.fullSize {
+  width: 100%;
+}
+
+.sub-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.title {
+  text-align: center;
+  color: var(--primary-color);
+  font-size: 2rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+.subtitle {
+  margin-bottom: 2rem;
+}
+
+.subtitle > span{
+  font-weight: 600;
+  color: #ff3d32;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card-title {
+  font-family: 'Fira Sans Condensed', sans-serif;
+  font-size: 1.1rem;
+}
+
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.link {
+  margin-left: 0.2rem;
+  pointer-events: auto !important;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.card-confirm {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tags-confirm {
+  display: flex;
+  gap: 0.5rem;
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+  color: white;
+  text-decoration: none;
+}

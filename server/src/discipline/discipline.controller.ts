@@ -23,8 +23,8 @@ import {
 } from '@nestjs/swagger';
 import { CreateOrUpdateDisciplineSchema } from './schemas/CreateOrUpdateDisciplineSchema';
 import { GroupDto } from '../group/dto/GroupDto';
-import { PaginationSchema } from '../resources/dto/PaginationSchema';
 import { NumberIdSchema } from '../resources/dto/NumberIdSchema';
+import { GetDisciplinesSchema } from './schemas/GetDisciplinesSchema';
 
 @ApiTags('Disciplines')
 @Controller('/api/disciplines')
@@ -61,12 +61,20 @@ export class DisciplineController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll(@Query() query: PaginationSchema) {
+  async findAll(@Query() query: GetDisciplinesSchema) {
     const scopes = [];
     let disciplines = [];
 
     if (query.limit || query.offset) {
       scopes.push({ method: ['byPage', query.limit, query.offset] });
+    }
+
+    if (query.semester) {
+      scopes.push({ method: ['bySemester', query.semester] });
+    }
+
+    if (query.year) {
+      scopes.push({ method: ['byYear', query.year] });
     }
 
     const count = await this.disciplineService.count(scopes);

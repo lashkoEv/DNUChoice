@@ -15,6 +15,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '../user/user.model';
 import { StudentDiscipline } from '../student-discipline/student-discipline.model';
+import { Op } from 'sequelize';
 
 @Scopes(() => ({
   byId: (id: number) => ({
@@ -32,6 +33,20 @@ import { StudentDiscipline } from '../student-discipline/student-discipline.mode
       },
     ],
     subQuery: false,
+  }),
+  bySemester: (semester: string) => ({
+    where: {
+      semester: {
+        [Op.like]: `%${semester}%`,
+      },
+    },
+  }),
+  byYear: (year: string) => ({
+    where: {
+      year: {
+        [Op.like]: `%${year}%`,
+      },
+    },
   }),
 }))
 @Table({

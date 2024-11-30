@@ -39,7 +39,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .fullSize {
@@ -49,22 +49,6 @@
 .button-container {
   display: flex;
   gap: 1rem;
-}
-
-a:link {
-  color: var(--primary-color);
-}
-
-a:visited {
-  color: var(--primary-color);
-}
-
-a:hover {
-  color: #003a85;
-}
-
-a:active {
-  color: var(--primary-color);
 }
 
 @media screen and (max-width: 730px) {

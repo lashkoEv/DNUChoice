@@ -31,6 +31,12 @@ import { DisciplineComponent } from './components/discipline/discipline.componen
 import { RippleModule } from 'primeng/ripple';
 import { StudentChoiceComponent } from './components/student-choice/student-choice.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { TabViewModule } from 'primeng/tabview';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { PickListModule } from 'primeng/picklist';
+import { TagModule } from 'primeng/tag';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
   declarations: [
@@ -66,7 +72,13 @@ import { ProfileComponent } from './components/profile/profile.component';
     DialogModule,
     ReactiveFormsModule,
     ListboxModule,
-    RippleModule
+    RippleModule,
+    TabViewModule,
+    PickListModule,
+    DragDropModule,
+    TagModule,
+    OverlayPanelModule,
+    DividerModule
   ],
   providers: [MessageService, ConfirmationService, HttpClient],
   bootstrap: [AppComponent],

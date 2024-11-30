@@ -4,12 +4,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Playwrite+CL&display=swap');
 
+/** {*/
+/*  font-family: 'Fira Sans Condensed', sans-serif;*/
+/*}*/
+
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Fira Sans Condensed', sans-serif;
 }
-
 
 .ban {
   width: 100%;
@@ -33,6 +35,22 @@ body {
   font-family: 'Lobster', sans-serif;
   font-weight: 300;
   color: #8c969e;
+}
+
+a:link {
+  color: var(--primary-color);
+}
+
+a:visited {
+  color: var(--primary-color);
+}
+
+a:hover {
+  color: #003a85;
+}
+
+a:active {
+  color: var(--primary-color);
 }
 
 @media screen and (max-width: 730px) {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { UserService } from './user.service';
 
@@ -71,6 +71,25 @@ export class DisciplineService {
           severity: 'error',
           summary: 'Помилка редагування дисципліни!',
           detail: 'Перевірте введені дані! Або могла статись помилка на сервері...',
+        });
+        throw err;
+      }),
+    );
+  }
+
+  getBySemesterAndYear(semester: number, year: number): Observable<any[]> {
+    const headers = this.userService.getHeaders();
+
+    let params = new HttpParams();
+    params = params.append('semester', semester.toString());
+    params = params.append('year', year.toString());
+
+    return this.http.get<any[]>(`${this.apiUrl}`, { headers, params }).pipe(
+      catchError((err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Помилка отримання даних!',
+          detail: 'Не вдалося отримати список дисциплін...',
         });
         throw err;
       }),
