@@ -77,12 +77,15 @@ export class DisciplineService {
     );
   }
 
-  getBySemesterAndYear(semester: number, year: number): Observable<any[]> {
+  getBySemesterAndYear(semester: number, year: number, excludesId: any[]): Observable<any[]> {
     const headers = this.userService.getHeaders();
 
     let params = new HttpParams();
     params = params.append('semester', semester.toString());
     params = params.append('year', year.toString());
+    excludesId.forEach((id: any) => {
+      params = params.append('id', id.toString());
+    });
 
     return this.http.get<any[]>(`${this.apiUrl}`, { headers, params }).pipe(
       catchError((err) => {

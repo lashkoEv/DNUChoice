@@ -61,6 +61,22 @@ export class DisciplineDto {
   forYear?: number;
 
   @ApiProperty({
+    description: 'Student discipline identifier',
+    nullable: true,
+    example: '1',
+    type: 'number',
+  })
+  studentDisciplineId?: number;
+
+  @ApiProperty({
+    description: 'Is locked',
+    nullable: true,
+    example: 'true',
+    type: 'boolean',
+  })
+  isLocked?: boolean;
+
+  @ApiProperty({
     description: 'Catalogue type',
     nullable: false,
     example: '1',
@@ -113,8 +129,10 @@ export class DisciplineDto {
     this.title = discipline.title;
     this.semester = discipline.semester;
     this.year = discipline.year;
+    this.studentDisciplineId = discipline.StudentDiscipline?.id || undefined;
     this.forSemester = discipline.StudentDiscipline?.forSemester || undefined;
     this.forYear = discipline.StudentDiscipline?.forYear || undefined;
+    this.isLocked = discipline.StudentDiscipline?.isLocked || undefined;
     this.catalogueType = discipline.catalogueType;
     this.educationalLevel = discipline.educationalLevel;
     this.link = discipline.link;

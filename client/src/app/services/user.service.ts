@@ -171,4 +171,34 @@ export class UserService {
     const user = this.userSubject.getValue();
     return user?.role || '';
   }
+
+  selectDisciplines(payload: any) {
+    const headers = this.getHeaders();
+
+    return this.http.post("http://localhost:3000/api/studentDisciplines", {data : payload}, { headers }).pipe(
+      catchError((err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Помилка!',
+          detail: 'Можливо ви вже обирали ці дисципліни!',
+        });
+        throw err;
+      }),
+    );
+  }
+
+  setLock(id: number, isLocked: boolean) {
+    const headers = this.getHeaders();
+
+    return this.http.patch(`http://localhost:3000/api/studentDisciplines/${id}`, { isLocked }, { headers }).pipe(
+      catchError((err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Помилка!',
+          detail: 'Можливо сталась помилка на сервері...',
+        });
+        throw err;
+      }),
+    );
+  }
 }

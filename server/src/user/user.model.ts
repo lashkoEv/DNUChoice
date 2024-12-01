@@ -75,7 +75,7 @@ import { DisciplinesCount } from '../disciplines-count/disciplines-count.model';
     include: [
       {
         model: Discipline,
-        through: { attributes: ['forSemester', 'forYear'] },
+        through: { attributes: ['id', 'forSemester', 'forYear', 'isLocked'] },
       },
     ],
     subQuery: false,

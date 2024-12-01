@@ -168,6 +168,78 @@ export class StudentComponent {
     }
   }
 
+  confirmLock(event: Event, id: number) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `Ви впевнені, що хочете заблокувати дисципліну для перевибору студентом?`,
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Так',
+      rejectLabel: 'Ні',
+      accept: () => {
+        this.lock(id);
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Скасовано',
+          detail: 'Блокування дисципліни скасовано.',
+        });
+      },
+    });
+  }
+
+  lock(id: number) {
+    this.userService.setLock(id, true).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Успіх!',
+          detail: 'Ви успішно заблокували дисципліну!',
+        });
+        this.fetchUsers();
+        this.displayUserDialog = false;
+      },
+      error: () => {
+      },
+    });
+  }
+
+  confirmUnlock(event: Event, id: number) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `Ви впевнені, що хочете розблокувати дисципліну для перевибору студентом?`,
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Так',
+      rejectLabel: 'Ні',
+      accept: () => {
+        this.unlock(id);
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Скасовано',
+          detail: 'Розблокування дисципліни скасовано.',
+        });
+      },
+    });
+  }
+
+  unlock(id: number) {
+    this.userService.setLock(id, false).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Успіх!',
+          detail: 'Ви успішно розблокували дисципліну!',
+        });
+        this.fetchUsers();
+        this.displayUserDialog = false;
+      },
+      error: () => {
+      },
+    });
+  }
+
   getRole() {
     return this.userService.getUserRole();
   }

@@ -22,7 +22,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateOrUpdateDisciplineSchema } from './schemas/CreateOrUpdateDisciplineSchema';
-import { GroupDto } from '../group/dto/GroupDto';
 import { NumberIdSchema } from '../resources/dto/NumberIdSchema';
 import { GetDisciplinesSchema } from './schemas/GetDisciplinesSchema';
 
@@ -39,7 +38,7 @@ export class DisciplineController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Success',
-    type: GroupDto,
+    type: DisciplineDto,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @ApiBearerAuth()
@@ -75,6 +74,10 @@ export class DisciplineController {
 
     if (query.year) {
       scopes.push({ method: ['byYear', query.year] });
+    }
+
+    if (query.id) {
+      scopes.push({ method: ['excludesId', query.id] });
     }
 
     const count = await this.disciplineService.count(scopes);

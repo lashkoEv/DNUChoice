@@ -21,6 +21,9 @@ import { Op } from 'sequelize';
   byId: (id: number) => ({
     where: { id },
   }),
+  excludesId: (id: number) => ({
+    where: { id: { [Op.notIn]: id } },
+  }),
   byPage: (limit: number = null, offset: number = 0) => ({
     limit,
     offset,
@@ -29,7 +32,7 @@ import { Op } from 'sequelize';
     include: [
       {
         model: User,
-        through: { attributes: ['forSemester', 'forYear'] },
+        through: { attributes: ['id', 'forSemester', 'forYear', 'isLocked'] },
       },
     ],
     subQuery: false,

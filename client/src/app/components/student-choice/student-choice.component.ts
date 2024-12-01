@@ -94,7 +94,8 @@ export class StudentChoiceComponent implements OnInit {
   }
 
   fetchDisciplines(semester: number, year: number) {
-    this.disciplineService.getBySemesterAndYear(semester, year).subscribe({
+    const excludesIds = this.user.disciplines.map((discipline: any) => discipline.id);
+    this.disciplineService.getBySemesterAndYear(semester, year, excludesIds).subscribe({
       next: (data: any) => {
         this.disciplines = data.data;
       },
@@ -139,7 +140,18 @@ export class StudentChoiceComponent implements OnInit {
       }
     });
 
-    console.log(payload);
+    this.userService.selectDisciplines(payload).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Успіх!',
+          detail: 'Ви успішно обрали дисципліни!',
+        });
+        this.router.navigate(['/']);
+      },
+      error: () => {
+      },
+    });
   }
 
   getRole() {

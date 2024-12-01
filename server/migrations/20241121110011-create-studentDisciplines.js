@@ -11,6 +11,7 @@ module.exports = {
         disciplineId INT NOT NULL,
         forSemester TINYINT NOT NULL,
         forYear TINYINT NOT NULL,
+        isLocked BOOLEAN DEFAULT FALSE,
         createdAt TIMESTAMP NOT NULL DEFAULT NOW(),
         updatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
         

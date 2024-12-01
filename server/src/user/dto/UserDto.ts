@@ -64,6 +64,14 @@ export class UserDto {
   disciplines: DisciplineDto[];
 
   @ApiProperty({
+    description: 'Student discipline identifier',
+    nullable: true,
+    example: '1',
+    type: 'number',
+  })
+  studentDisciplineId?: number;
+
+  @ApiProperty({
     description: 'For semester',
     nullable: true,
     example: '1',
@@ -78,6 +86,14 @@ export class UserDto {
     type: 'integer',
   })
   forYear?: number;
+
+  @ApiProperty({
+    description: 'Is locked',
+    nullable: true,
+    example: 'false',
+    type: 'boolean',
+  })
+  isLocked?: boolean;
 
   @ApiProperty({
     description: 'Created at',
@@ -120,7 +136,9 @@ export class UserDto {
     this.disciplines = disciplines
       ? disciplines.map((item) => new DisciplineDto(item))
       : undefined;
+    this.studentDisciplineId = StudentDiscipline?.id || undefined;
     this.forSemester = StudentDiscipline?.forSemester || undefined;
     this.forYear = StudentDiscipline?.forYear || undefined;
+    this.isLocked = StudentDiscipline?.isLocked || undefined;
   }
 }

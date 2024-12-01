@@ -37,6 +37,7 @@ import { PickListModule } from 'primeng/picklist';
 import { TagModule } from 'primeng/tag';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { DividerModule } from 'primeng/divider';
+import { ReselectComponent } from './components/reselect/reselect.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { DividerModule } from 'primeng/divider';
     DisciplineComponent,
     StudentChoiceComponent,
     ProfileComponent,
+    ReselectComponent,
   ],
   imports: [
     BrowserModule,

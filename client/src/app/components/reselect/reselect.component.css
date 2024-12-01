@@ -1,0 +1,35 @@
+
+.container {
+  padding: 1rem 2rem;
+}
+
+.fullSize {
+  width: 100%;
+}
+
+.sub-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.title {
+  text-align: center;
+  color: var(--primary-color);
+  font-size: 2rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+.subtitle {
+  margin-bottom: 2rem;
+}
+
+.subtitle > span{
+  font-weight: 600;
+  color: #ff3d32;
+}

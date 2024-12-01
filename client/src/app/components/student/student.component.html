@@ -87,7 +87,7 @@
     [header]="'Детальна інформація'"
     [closable]="true"
     [dismissableMask]="true"
-    [style]="{width: '600px'}"
+    [style]="{width: '800px'}"
     [modal]="true"
     [baseZIndex]="10000">
 
@@ -119,6 +119,11 @@
                 <th pSortableColumn="forYear">Обрано на курс
                   <p-sortIcon field="forYear"></p-sortIcon>
                 </th>
+                <th pSortableColumn="isLocked">Статус
+                  <p-sortIcon field="isLocked"></p-sortIcon>
+                </th>
+                <th style="width: 5rem"></th>
+                <th style="width: 5rem"></th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-discipline>
@@ -127,6 +132,15 @@
                 <td>{{ discipline.title }}</td>
                 <td>{{ discipline.forSemester }}</td>
                 <td>{{ discipline.forYear }}</td>
+                <td>{{ discipline.isLocked ? "Заблоковано" : "Доступно" }}</td>
+                <td>
+                  <p-button icon="pi pi-lock" [rounded]="true" [text]="true" severity="info"
+                            (click)="confirmLock($event, discipline.studentDisciplineId)"/>
+                </td>
+                <td>
+                  <p-button icon="pi pi-lock-open" [rounded]="true" [text]="true" severity="info"
+                            (click)="confirmUnlock($event, discipline.studentDisciplineId)"/>
+                </td>
               </tr>
             </ng-template>
           </p-table>

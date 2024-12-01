@@ -89,6 +89,11 @@ export class HeaderComponent implements OnInit {
             icon: 'pi pi-plus-circle',
             routerLink: ['/add-disciplines'],
           },
+          {
+            label: 'Перевибір',
+            icon: 'pi pi-file-edit',
+            routerLink: ['/reselect-disciplines'],
+          },
         );
         break;
       }

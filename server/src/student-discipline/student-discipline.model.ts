@@ -63,6 +63,18 @@ export class StudentDiscipline extends Model {
   forYear: number;
 
   @ApiProperty({
+    description: 'Is locked to delete',
+    nullable: false,
+    example: 'false',
+    type: 'boolean',
+  })
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+  })
+  isLocked: boolean;
+
+  @ApiProperty({
     description: 'Created at',
     nullable: false,
     example: '2024-07-03T19:32:40.000Z',
