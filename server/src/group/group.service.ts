@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Group } from './group.model';
+import { Transaction } from 'sequelize';
 
 @Injectable()
 export class GroupService {
@@ -12,6 +13,19 @@ export class GroupService {
     @InjectModel(Group)
     private groupModel: typeof Group,
   ) {}
+
+  async findOrCreate(
+    data: { title: string },
+    transaction: Transaction,
+  ): Promise<Group> {
+    const [group] = await this.groupModel.findOrCreate({
+      where: { title: data.title },
+      defaults: { title: data.title },
+      transaction,
+    });
+
+    return group;
+  }
 
   async count(scopes: any[] = []): Promise<number> {
     try {

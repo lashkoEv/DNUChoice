@@ -8,7 +8,7 @@ module.exports = {
       `CREATE TABLE IF NOT EXISTS academicGroups (
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         title VARCHAR(255) UNIQUE NOT NULL,
-        year TINYINT NOT NULL,
+        year TINYINT DEFAULT NULL,
         createdAt TIMESTAMP NOT NULL DEFAULT NOW(),
         updatedAt TIMESTAMP NOT NULL DEFAULT NOW()
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci`,

@@ -8,14 +8,66 @@ import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
 import { User } from './user.model';
 import { Op } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 import { CreateSessionSchema } from 'src/session/schemas/CreateSessionSchema';
+import { GroupService } from '../group/group.service';
+import { DisciplineService } from '../discipline/discipline.service';
+import { StudentDisciplineService } from '../student-discipline/student-discipline.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User)
     private userModel: typeof User,
+    private readonly groupService: GroupService,
+    private readonly disciplineService: DisciplineService,
+    private readonly studentDisciplineService: StudentDisciplineService,
+    private sequelize: Sequelize,
   ) {}
+
+  async processStudents(data: any[]) {
+    try {
+      await this.sequelize.transaction(async (transaction) => {
+        for (const student of data) {
+          const group = await this.groupService.findOrCreate(
+            {
+              title: student.group,
+            },
+            transaction,
+          );
+
+          const [user] = await this.userModel.findOrCreate({
+            where: { email: student.email },
+            defaults: {
+              name: student.name,
+              email: student.email,
+              password: await bcrypt.hash('defaultPassword', 10),
+              role: 3,
+              groupId: group.id,
+            },
+            transaction,
+          });
+
+          for (const disciplineData of student.disciplines) {
+            const discipline = await this.disciplineService.findOrCreate(
+              disciplineData,
+              transaction,
+            );
+
+            await this.studentDisciplineService.findOrCreate(
+              user.id,
+              discipline.id,
+              student.forSemester,
+              student.forYear,
+              transaction,
+            );
+          }
+        }
+      });
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
 
   async getCount(scopes: any[]): Promise<number> {
     try {

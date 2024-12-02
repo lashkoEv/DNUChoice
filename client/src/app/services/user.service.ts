@@ -216,4 +216,20 @@ export class UserService {
       }),
     );
   }
+
+  importUsers(data: any) {
+    const headers = this.getHeaders();
+
+    return this.http.post<any>(`${this.apiUrl}/import`, { data }, { headers }).pipe(
+      catchError((err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Помилка імпорту!',
+          detail: 'Сталась помилка під час імпорту даних...',
+        });
+        throw err;
+      }),
+    );
+  }
+
 }

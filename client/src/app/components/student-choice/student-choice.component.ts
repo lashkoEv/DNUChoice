@@ -31,7 +31,6 @@ export class StudentChoiceComponent implements OnInit {
   ];
 
   constructor(private fb: FormBuilder, private userService: UserService, private router: Router, private messageService: MessageService, private disciplineService: DisciplineService, private primengConfig: PrimeNGConfig) {
-
     this.form = this.fb.group({
       semester: ['', Validators.required, this.positiveNumberValidator],
       year: ['', Validators.required, this.positiveNumberValidator],
@@ -107,6 +106,15 @@ export class StudentChoiceComponent implements OnInit {
   loadDisciplines(): void {
     if (this.form.valid) {
       const value = this.form.value;
+      if (this.user.disciplines.find((discipline: any) => discipline.forSemester === value.semester.value && discipline.forYear === value.year)) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Помилка!',
+          detail: 'Ви вже робили вибір для даних курсу і семестру! Для перевибору перейдіть на вкладку "Перевибір"!',
+        });
+        this.router.navigate(['/']);
+        return;
+      }
       this.fetchDisciplines(value.semester.value, value.year);
       const choice = this.user.group.disciplinesCounts.find(
         (count: any) => count.toSemester === value.semester.value && count.toYear === value.year

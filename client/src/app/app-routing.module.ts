@@ -11,6 +11,7 @@ import { DisciplineComponent } from './components/discipline/discipline.componen
 import { StudentChoiceComponent } from './components/student-choice/student-choice.component';
 import { ReselectComponent } from './components/reselect/reselect.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { UploadComponent } from './components/upload/upload.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'add-disciplines', component: StudentChoiceComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'reselect-disciplines', component: ReselectComponent },
+  { path: 'upload', component: UploadComponent },
   { path: '**', component: ErrorComponent },
 ];
 

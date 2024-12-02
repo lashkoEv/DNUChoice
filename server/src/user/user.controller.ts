@@ -30,6 +30,7 @@ import { IUser } from './entities/IUser';
 import { Request as ExpressRequest } from 'express';
 import { IJwtPayload } from 'src/guards/IJwtPayload';
 import { GetAllUsersSchema } from './schemas/GetAllUsersSchema';
+import { ImportSchema } from './schemas/ImportDataSchema';
 
 @ApiTags('Users')
 @Controller('/api/users')
@@ -46,16 +47,11 @@ export class UserController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getAll(
-    @Query() query: GetAllUsersSchema,
-    // @Request() req: ExpressRequest,
-  ): Promise<UsersDto> {
-    // const payload = req.user as IJwtPayload;
+  async getAll(@Query() query: GetAllUsersSchema): Promise<UsersDto> {
     let count = 0;
     let users = [];
 
     const scopes: any[] = [];
-    // [{ method: ['excludesId', payload.id] }];
 
     if (query.query) {
       scopes.push({ method: ['byNameOrEmail', query.query] });
@@ -200,5 +196,18 @@ export class UserController {
     if (result) {
       await this.userService.delete(result);
     }
+  }
+
+  @ApiOperation({ summary: 'Import students from file' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Success',
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('/import')
+  async importStudents(@Body() data: ImportSchema) {
+    await this.userService.processStudents(data.data);
+    return;
   }
 }

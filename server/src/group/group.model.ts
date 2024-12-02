@@ -72,7 +72,7 @@ export class Group extends Model {
     example: '1',
     type: 'integer',
   })
-  @AllowNull(false)
+  @AllowNull(true)
   @Column(DataType.TINYINT)
   year: number;
 

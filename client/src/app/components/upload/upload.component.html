@@ -1,0 +1,121 @@
+<div class="container" *ngIf="getRole() === UserRoles.admin">
+  <div class="sub-container">
+    <div class="title">Оберіть семестр і курс, для яких імпортуєте дані:</div>
+
+    <form class="fullSize" [formGroup]="form">
+      <div class="p-fluid form-container">
+        <div class="p-field fullSize">
+          <p-dropdown
+            id="semester"
+            [options]="semesters"
+            optionLabel="label"
+            formControlName="semester"
+            placeholder="Оберіть семестр">
+          </p-dropdown>
+          <small
+            *ngIf="form.get('semester')?.hasError('positiveNumber') && form.get('semester')?.touched"
+            class="p-error">
+            Введіть коректний семестр! Семестр повинен бути 1 чи 2.
+          </small>
+          <small
+            *ngIf="form.get('semester')?.hasError('required') && form.get('semester')?.touched"
+            class="p-error">
+            Семестр обов'язковий!
+          </small>
+        </div>
+
+        <div class="p-field fullSize">
+          <p-inputGroup>
+                <span class="p-inputgroup-addon">
+                  <i class="pi pi-graduation-cap"></i>
+                </span>
+            <input
+              id="year"
+              type="number"
+              pInputText
+              formControlName="year"
+              placeholder="Курс"
+              [min]="1"
+            />
+          </p-inputGroup>
+          <small
+            *ngIf="form.get('year')?.hasError('positiveNumber') && form.get('year')?.touched"
+            class="p-error">
+            Введіть коректний курс! Курс повинен бути більше 0.
+          </small>
+          <small
+            *ngIf="form.get('year')?.hasError('required') && form.get('year')?.touched"
+            class="p-error">
+            Курс обов'язковий!
+          </small>
+        </div>
+      </div>
+    </form>
+
+    <p-fileUpload
+      [disabled]="form.invalid"
+      mode="basic"
+      name="file"
+      accept=".xlsx,.xls"
+      [auto]="true"
+      maxFileSize="1000000"
+      (onSelect)="onUpload($event)"
+      chooseIcon="pi pi-upload"
+      chooseLabel="Завантажити"
+    ></p-fileUpload>
+
+    <p-table
+      *ngIf="data.length"
+      class="fullSize"
+      [value]="data"
+      [paginator]="true"
+      [sortMode]="'multiple'"
+      [scrollable]="true"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [rows]="5">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="email">Пошта
+            <p-sortIcon field="email"></p-sortIcon>
+          </th>
+          <th pSortableColumn="name">ПІБ
+            <p-sortIcon field="name"></p-sortIcon>
+          </th>
+          <th pSortableColumn="group">Група
+            <p-sortIcon field="group"></p-sortIcon>
+          </th>
+          <th>Дисципліни</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>{{ item.email }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.group }}</td>
+          <td>
+           <div *ngFor="let discipline of prepareDisciplines(item.disciplines)">
+             {{ discipline }}
+           </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <p-button
+      *ngIf="data.length"
+      label="Імпортувати дані"
+      severity="success"
+      icon="pi pi-file-import"
+      (onClick)="import()"
+    ></p-button>
+  </div>
+</div>
+
+
+<div *ngIf="getRole() !== UserRoles.admin" class="ban">
+  <i class="pi pi-lock ban-icon"></i>
+
+  <div class="ban-text">
+    У вас немає доступу до цієї сторінки!
+  </div>
+</div>

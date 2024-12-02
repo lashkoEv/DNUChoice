@@ -5,6 +5,8 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Discipline } from './discipline.model';
+import { Transaction } from 'sequelize';
+import { Group } from '../group/group.model';
 
 @Injectable()
 export class DisciplineService {
@@ -12,6 +14,22 @@ export class DisciplineService {
     @InjectModel(Discipline)
     private disciplineModel: typeof Discipline,
   ) {}
+
+  async findOrCreate(
+    disciplineData: any,
+    transaction: Transaction,
+  ): Promise<Discipline> {
+    const [discipline] = await this.disciplineModel.findOrCreate({
+      where: { code: disciplineData.code },
+      defaults: {
+        code: disciplineData.code,
+        title: disciplineData.title,
+      },
+      transaction,
+    });
+
+    return discipline;
+  }
 
   async count(scopes: any[] = []): Promise<number> {
     try {

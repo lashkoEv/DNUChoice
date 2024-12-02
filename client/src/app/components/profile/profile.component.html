@@ -1,7 +1,7 @@
 <div class="container" *ngIf="getRole() === UserRoles.student">
   <div *ngIf="disciplines.length" class="sub-container">
     <div class="search-container fullSize">
-      <span class="p-input-icon-left fullSize">
+      <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
         <input
           class="fullSize"
@@ -11,6 +11,14 @@
           (input)="applyFilter($event)"
         />
       </span>
+
+      <p-button
+        class="btn"
+        label="Змінити пароль"
+        icon="pi pi-pencil"
+        severity="success"
+        (onClick)="openEditUserDialog()"
+      ></p-button>
     </div>
 
     <p-table
@@ -75,13 +83,67 @@
   <div class="sub-container" *ngIf="!disciplines.length">
     <div class="title">У вас ще немає обраних дисциплін!</div>
 
-    <p-button
-      class="btn"
-      label="Повернутись на головну сторінку"
-      icon="pi pi-arrow-left"
-      routerLink="/"
-    ></p-button>
+    <div class="buttons">
+      <p-button
+        class="btn"
+        label="Змінити пароль"
+        icon="pi pi-pencil"
+        severity="success"
+        (onClick)="openEditUserDialog()"
+      ></p-button>
+
+      <p-button
+        class="btn"
+        label="Повернутись на головну сторінку"
+        icon="pi pi-arrow-left"
+        routerLink="/"
+      ></p-button>
+    </div>
   </div>
+
+  <p-dialog
+    [(visible)]="displayEditUserDialog"
+    [header]="'Зміна пароля'"
+    [closable]="true"
+    [modal]="true"
+    [style]="{width: '600px'}"
+    [baseZIndex]="10000">
+
+    <ng-template pTemplate="content">
+      <form [formGroup]="editUserForm">
+        <div class="p-fluid form-container">
+          <div class="p-field fullSize">
+            <p-inputGroup>
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-key"></i>
+            </span>
+              <input
+                id="password"
+                type="password"
+                pInputText
+                formControlName="password"
+                [minlength]="6"
+                required
+                placeholder="Пароль"
+              />
+            </p-inputGroup>
+
+            <small *ngIf="editUserForm.get('password')?.invalid && editUserForm.get('password')?.touched"
+                   class="p-error">
+              Введіть коректний пароль!
+            </small>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <button pButton label="Зберегти" icon="pi pi-check" (click)="saveEditedUser()"
+              [disabled]="editUserForm.invalid"></button>
+      <button pButton label="Скасувати" icon="pi pi-times" (click)="closeEditUserDialog()"
+              class="p-button-text"></button>
+    </ng-template>
+  </p-dialog>
 </div>
 
 <div *ngIf="getRole() !== UserRoles.student" class="ban">

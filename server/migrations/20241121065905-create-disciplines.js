@@ -11,8 +11,8 @@ module.exports = {
         title VARCHAR(255) UNIQUE NOT NULL,
         semester VARCHAR(100) NULL,
         year VARCHAR(100) NULL,
-        catalogueType TINYINT NULL,
-        educationalLevel TINYINT NULL,
+        catalogueType TINYINT DEFAULT NULL,
+        educationalLevel TINYINT DEFAULT NULL,
         link TEXT NULL,
         createdAt TIMESTAMP NOT NULL DEFAULT NOW(),
         updatedAt TIMESTAMP NOT NULL DEFAULT NOW()

@@ -54,6 +54,11 @@ export class HeaderComponent implements OnInit {
             icon: 'pi pi-book',
             routerLink: ['/disciplines'],
           },
+          {
+            label: 'Завантажити дані',
+            icon: 'pi pi-upload',
+            routerLink: ['/upload'],
+          },
         );
         break;
       }

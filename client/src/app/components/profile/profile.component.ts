@@ -4,6 +4,7 @@ import {EducationalLevelLabels, EducationalLevels} from '../../enums/Educational
 import {CatalogueTypeLabels, CatalogueTypes} from '../../enums/CatalogueTypes';
 import {UserService} from '../../services/user.service';
 import {MessageService} from 'primeng/api';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -14,6 +15,8 @@ export class ProfileComponent implements OnInit {
   user: any = null;
   disciplines: any[] = [];
   filteredDisciplines: any[] = [];
+  displayEditUserDialog: boolean = false;
+  editUserForm: FormGroup;
 
   catalogueTypes = [
     { label: 'Університетський', value: CatalogueTypes.university },
@@ -26,7 +29,11 @@ export class ProfileComponent implements OnInit {
     { label: 'Освітньо-науковий', value: EducationalLevels.postgraduate },
   ];
 
-  constructor(private userService: UserService, private messageService: MessageService) {}
+  constructor(private userService: UserService, private messageService: MessageService, private fb: FormBuilder) {
+    this.editUserForm = this.fb.group({
+      password: ['', [Validators.required]],
+    });
+  }
 
   ngOnInit(): void {
     this.fetchUser();
@@ -66,6 +73,41 @@ export class ProfileComponent implements OnInit {
           String(discipline.forYear).toLowerCase().includes(query);
       },
     );
+  }
+
+  openEditUserDialog(): void {
+    this.displayEditUserDialog = true;
+  }
+
+  closeEditUserDialog() {
+    this.displayEditUserDialog = false;
+    this.editUserForm.reset();
+  }
+
+  saveEditedUser() {
+    if (this.editUserForm.valid) {
+      const updatedUser = {
+        password: this.editUserForm.value.password,
+        email: this.user.email,
+        role: this.user.role,
+        groupId: this.user.groupId,
+        name: this.user.name,
+      }
+
+      this.userService.updateUser(this.user.id, updatedUser).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Успіх!',
+            detail: 'Дані успішно оновлено!',
+          });
+          this.fetchUser();
+          this.closeEditUserDialog();
+        },
+        error: () => {
+        },
+      });
+    }
   }
 
   getEducationalLevel(discipline: any) {

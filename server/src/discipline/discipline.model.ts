@@ -122,7 +122,7 @@ export class Discipline extends Model {
   })
   @Column({
     type: DataType.TINYINT,
-    allowNull: false,
+    allowNull: true,
   })
   catalogueType: number;
 
@@ -134,7 +134,7 @@ export class Discipline extends Model {
   })
   @Column({
     type: DataType.TINYINT,
-    allowNull: false,
+    allowNull: true,
   })
   educationalLevel: number;
 

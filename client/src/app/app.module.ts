@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RegistrationComponent } from './components/registration/registration.component';
@@ -39,6 +38,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { DividerModule } from 'primeng/divider';
 import { ReselectComponent } from './components/reselect/reselect.component';
 import { UploadComponent } from './components/upload/upload.component';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
   declarations: [
@@ -82,7 +82,8 @@ import { UploadComponent } from './components/upload/upload.component';
     DragDropModule,
     TagModule,
     OverlayPanelModule,
-    DividerModule
+    DividerModule,
+    FileUploadModule
   ],
   providers: [MessageService, ConfirmationService, HttpClient],
   bootstrap: [AppComponent],

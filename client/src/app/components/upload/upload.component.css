@@ -10,8 +10,6 @@
 .search-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
 }
 
 .sub-container {
@@ -20,7 +18,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  gap: 1rem;
+  gap: 2rem;
 }
 
 .title {
@@ -46,10 +44,11 @@
   margin-top: 1rem;
 }
 
-.buttons {
+.form-container {
   display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  gap: 1rem;
 }
