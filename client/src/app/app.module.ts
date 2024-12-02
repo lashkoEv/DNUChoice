@@ -38,6 +38,7 @@ import { TagModule } from 'primeng/tag';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { DividerModule } from 'primeng/divider';
 import { ReselectComponent } from './components/reselect/reselect.component';
+import { UploadComponent } from './components/upload/upload.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { ReselectComponent } from './components/reselect/reselect.component';
     StudentChoiceComponent,
     ProfileComponent,
     ReselectComponent,
+    UploadComponent,
   ],
   imports: [
     BrowserModule,

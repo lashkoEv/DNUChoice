@@ -1,6 +1,6 @@
 import { IsArray, IsInt, IsNotEmpty } from 'class-validator';
 
-class RequestSchema {
+export class RequestSchema {
   @IsInt()
   @IsNotEmpty()
   disciplineId: number;

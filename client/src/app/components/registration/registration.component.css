@@ -31,6 +31,7 @@ p-dropdown {
   padding: 0;
   margin-bottom: 2rem;
   margin-top: 1rem;
+  font-family: 'Fira Sans Condensed', sans-serif;
 }
 
 p-dropdown, .p-dropdown {

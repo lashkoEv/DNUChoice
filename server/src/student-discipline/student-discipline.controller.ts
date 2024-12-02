@@ -20,6 +20,7 @@ import { CreateStudentDisciplineSchema } from './schemas/CreateStudentDiscipline
 import { StudentDisciplineService } from './student-discipline.service';
 import { NumberIdSchema } from '../resources/dto/NumberIdSchema';
 import { SetLockSchema } from './schemas/SetLockSchema';
+import { ReselectSchema } from './schemas/ReselectSchema';
 
 @ApiTags('StudentDisciplines')
 @Controller('/api/studentDisciplines')
@@ -42,6 +43,26 @@ export class StudentDisciplineController {
   @Post()
   async create(@Body() body: CreateStudentDisciplineSchema) {
     await this.studentDisciplineService.bulkCreate(body.data);
+
+    return;
+  }
+
+  @ApiOperation({ summary: 'Reselect disciplines' })
+  @ApiBody({
+    description: 'Data',
+    type: ReselectSchema,
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'Success',
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('/reselect')
+  async reselect(@Body() body: ReselectSchema) {
+    await this.studentDisciplineService.bulkDelete(body.toDelete);
+
+    await this.studentDisciplineService.bulkCreate(body.reselect);
 
     return;
   }

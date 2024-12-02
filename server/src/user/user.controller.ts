@@ -48,13 +48,14 @@ export class UserController {
   @Get()
   async getAll(
     @Query() query: GetAllUsersSchema,
-    @Request() req: ExpressRequest,
+    // @Request() req: ExpressRequest,
   ): Promise<UsersDto> {
-    const payload = req.user as IJwtPayload;
+    // const payload = req.user as IJwtPayload;
     let count = 0;
     let users = [];
 
-    const scopes: any[] = [{ method: ['excludesId', payload.id] }];
+    const scopes: any[] = [];
+    // [{ method: ['excludesId', payload.id] }];
 
     if (query.query) {
       scopes.push({ method: ['byNameOrEmail', query.query] });

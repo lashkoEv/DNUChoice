@@ -187,6 +187,21 @@ export class UserService {
     );
   }
 
+  reselectDisciplines(payload: any) {
+    const headers = this.getHeaders();
+
+    return this.http.post("http://localhost:3000/api/studentDisciplines/reselect", payload, { headers }).pipe(
+      catchError((err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Помилка!',
+          detail: 'Можливо сталась помилка на сервері...',
+        });
+        throw err;
+      }),
+    );
+  }
+
   setLock(id: number, isLocked: boolean) {
     const headers = this.getHeaders();
 

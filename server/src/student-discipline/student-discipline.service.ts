@@ -47,6 +47,14 @@ export class StudentDisciplineService {
     }
   }
 
+  async bulkDelete(id: any) {
+    try {
+      return await this.disciplineModel.destroy({ where: { id } });
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
   async findAll(scopes: any[] = []): Promise<StudentDiscipline[]> {
     try {
       return await this.disciplineModel.scope(scopes).findAll();

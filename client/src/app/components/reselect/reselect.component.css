@@ -1,10 +1,15 @@
-
 .container {
   padding: 1rem 2rem;
+  width: 100%;
 }
 
 .fullSize {
   width: 100%;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
 }
 
 .sub-container {
@@ -29,7 +34,12 @@
   margin-bottom: 2rem;
 }
 
-.subtitle > span{
+.subtitle > span {
   font-weight: 600;
   color: #ff3d32;
+}
+
+.btn {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 }

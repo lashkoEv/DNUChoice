@@ -10,6 +10,7 @@ import { StudentComponent } from './components/student/student.component';
 import { DisciplineComponent } from './components/discipline/discipline.component';
 import { StudentChoiceComponent } from './components/student-choice/student-choice.component';
 import { ReselectComponent } from './components/reselect/reselect.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
@@ -20,7 +21,7 @@ const routes: Routes = [
   { path: 'students', component: StudentComponent },
   { path: 'disciplines', component: DisciplineComponent },
   { path: 'add-disciplines', component: StudentChoiceComponent },
-  { path: 'profile', component: StudentChoiceComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: 'reselect-disciplines', component: ReselectComponent },
   { path: '**', component: ErrorComponent },
 ];

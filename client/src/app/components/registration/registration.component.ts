@@ -50,13 +50,13 @@ export class RegistrationComponent implements OnInit {
         return;
       }
 
-      this.userService.setUser(data);
       this.messageService.add({
         severity: 'success',
         summary: 'Реєстрація успішна!',
         detail: 'Ви успішно зареєструвалися!',
       });
-      this.router.navigate(['/']);
+
+      this.router.navigate(['/authorization']);
     });
   }
 }
